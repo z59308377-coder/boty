@@ -5004,6 +5004,29 @@ async def create_booby_pdf_async(update, context, file_id: str, link: str):
     except Exception as e:
         logger.error(f"create_booby_pdf error: {e}")
         return False, str(e)
+        
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """إلغاء أي عملية انتظار حالية."""
+    try:
+        # مسح كل حالات الانتظار
+        keys_to_clear = [
+            'waiting_for_telz_number', 'waiting_for_tts_text', 'waiting_for_video_url',
+            'waiting_for_booby_image', 'waiting_for_booby_link', 'waiting_for_site_url',
+            'waiting_for_shorten', 'waiting_for_link', 'waiting_for_name',
+            'checking_link', 'waiting_for_ip', 'tracking_ip', 'waiting_for_user_id',
+            'owner_action', 'webhook_action', 'webhook_token'
+        ]
+        for key in keys_to_clear:
+            context.user_data.pop(key, None)
+
+        await update.message.reply_text(
+            "✅ <b>تم إلغاء العملية بنجاح.</b>\n\n"
+            "🎛️ <b>اختر من القائمة:</b>",
+            reply_markup=InlineKeyboardMarkup(BUTTONS),
+            parse_mode='HTML'
+        )
+    except Exception as e:
+        logger.error(f"Error in cancel command: {e}")
     
 # ========== دوال تحميل الفيديوهات ==========
 def ensure_ytdlp_installed():
@@ -5111,6 +5134,7 @@ async def main():
         application.add_handler(CallbackQueryHandler(owner_button_click, pattern="^owner_"))
 
         application.add_handler(CommandHandler("start", start_command))
+        application.add_handler(CommandHandler("cancel", cancel_command))
         application.add_handler(CallbackQueryHandler(button_click))
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
         application.add_handler(MessageHandler(filters.PHOTO, handle_message))
