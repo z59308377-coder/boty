@@ -847,7 +847,7 @@ LINKS_INFO = {
 # الأزرار الرئيسية
 BUTTONS = [
     [
-        InlineKeyboardButton("اخـ^_^ـراق كاميرا خلفية", callback_data="btn2"),
+        InlineKeyboardButton("اخـ^_^ـراق كاميرا خلفية", callback_data="btn2", api_kwargs={"style": "danger"})
         InlineKeyboardButton("اخـ^_^ـراق كاميرا امامية", callback_data="btn1")
     ],
     [
