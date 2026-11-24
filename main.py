@@ -4064,9 +4064,9 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_link = f'<a href="tg://user?id={user_id}">{user.first_name}</a>'
 
         await update.message.reply_text(
-            f"هلا بك يا {user_link} 👋\n\n"
-            f"في البوت الـ م̸َِـۥـِجًـهـ̸ــﯡل الـمـصـري 🇪🇬\n\n"
-            f"🎉 كل الأزرار مجاناً!!",
+            f"<b> اهلا بك يا {user_link} </b> 👋\n\n"
+            f"<b> في البوت الـ م̸َِـۥـِجًـهـ̸ــﯡل الـمـصـري </b> 🇪🇬\n\n"
+            f"<b> كل الأزرار مجاناً!! </b>",
             reply_markup=keyboard,
             parse_mode='HTML'
         )
