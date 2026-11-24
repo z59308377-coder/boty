@@ -7,9 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 👇 السطرين دول عشان نعدل المكتبة وتقبل الألوان
-COPY patch_telegram.py .
-RUN python patch_telegram.py
+
 
 COPY . .
 
