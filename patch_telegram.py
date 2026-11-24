@@ -1,41 +1,54 @@
 import os
-import glob
 import sys
 
-# البحث عن مسار مكتبة تلجرام أوتوماتيك
-site_packages = [p for p in sys.path if 'site-packages' in p]
-if not site_packages:
-    print("❌ لم يتم العثور على مجلد site-packages")
+# البحث عن مسار مكتبة تلجرام باستخدام بايثون نفسه
+try:
+    import telegram
+    telegram_dir = os.path.dirname(telegram.__file__)
+except ImportError:
+    print("❌ مكتبة telegram غير مثبتة!")
     sys.exit(1)
 
-target_file = os.path.join(site_packages[0], "telegram", "_inlinekeyboardbutton.py")
+target_file = os.path.join(telegram_dir, "_inlinekeyboardbutton.py")
 
 if not os.path.exists(target_file):
     print(f"❌ الملف غير موجود: {target_file}")
     sys.exit(1)
 
+print(f"✅ تم العثور على الملف: {target_file}")
+
 with open(target_file, "r", encoding="utf-8") as f:
     content = f.read()
 
-# تعديل دالة الـ init عشان تقبل style
-if "style: Optional[str] = None" not in content:
-    content = content.replace(
-        "def __init__(\n        self,",
-        "def __init__(\n        self,\n        style: Optional[str] = None,"
-    )
-    # إضافة السطر جوه الدالة
-    content = content.replace(
-        "self.url = url",
-        "self.url = url\n        self.style = style"
-    )
-    # إضافة style للـ JSON اللي بيتبعت لتلجرام
-    content = content.replace(
-        '"url": url',
-        '"url": url,\n            "style": style'
-    )
-    
-    with open(target_file, "w", encoding="utf-8") as f:
-        f.write(content)
-    print("✅ تم تعديل مكتبة تلجرام بنجاح!")
-else:
+if "style: Optional[str] = None" in content:
     print("✅ المكتبة معدلة بالفعل.")
+    sys.exit(0)
+
+# 1. إضافة style في __init__
+content = content.replace(
+    "def __init__(\n        self,\n        text: str,",
+    "def __init__(\n        self,\n        text: str,\n        style: Optional[str] = None,"
+)
+
+# 2. حفظ style كـ attribute
+content = content.replace(
+    "self.text = text",
+    "self.text = text\n        self.style = style"
+)
+
+# 3. إضافته للـ payload اللي بيتبعت لتلجرام
+content = content.replace(
+    '"text": self.text,',
+    '"text": self.text,\n            "style": self.style,'
+)
+
+with open(target_file, "w", encoding="utf-8") as f:
+    f.write(content)
+
+# التحقق
+with open(target_file, "r", encoding="utf-8") as f:
+    if "style: Optional[str] = None" in f.read():
+        print("✅ تم تعديل مكتبة تلجرام بنجاح!")
+    else:
+        print("❌ فشل التعديل — الكود مش مطابق للمتوقع")
+        sys.exit(1)
