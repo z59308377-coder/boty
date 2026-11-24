@@ -1,6 +1,9 @@
 python-telegram-bot==21.6
 requests
-yt-dlp
-flask
 httpx
+flask
 python-dotenv
+yt-dlp
+beautifulsoup4
+fpdf2
+Pillow
