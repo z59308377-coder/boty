@@ -7,7 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-
+# نسخ سكريبت التعديل وتشغيله — بيستخدم Python عشان يلاقي المسار الصح
 COPY patch_telegram.py .
 RUN python patch_telegram.py
 
