@@ -1817,7 +1817,7 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # ضع هنا رابط الرسالة من القناة العامة
     # طريقة الحصول على الرابط: افتح القناة -> دوس على الفيديو -> كليك يمين -> Copy Message Link
     # الرابط هيبقى شكله كده: https://t.me/اسم_القناة/رقم_الرسالة
-            video_post_url = "https://t.me/fkdfkdf3/3"  # 👈 غير ده لرابط الفيديو بتاعك
+            video_post_url = "https://t.me/fkdfkdf3/4"  # 👈 غير ده لرابط الفيديو بتاعك
     
     # الرابط اللي هيتم فتحه لما المستخدم يدوس على الزرار اللي تحت الرسالة
             my_profile_link = f"tg://user?id={DEVELOPER_ID}"  # 👈 بيفتح بروفايلك بالايدي
