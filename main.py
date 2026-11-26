@@ -1746,6 +1746,10 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if query.data == "temp_email_btn":
             await handle_temp_email_button(query)
             return
+            
+        if query.data.startswith("temp_email_"):
+            await temp_email_router(query, user_id)
+            return
 
         if query.data.startswith("rate_"):
             rating = int(query.data.split("_")[1])
@@ -3759,49 +3763,209 @@ async def send_decorated_names(update, name):
         logger.error(f"Error in send_decorated_names: {e}")
         await update.message.reply_text("❌ <b>حدث خطأ في الزخرفة. حاول مرة أخرى.</b>", parse_mode='HTML')
 
-# ========== دوال الإيميل المؤقت ==========
+
+# ========== خدمة البريد المؤقت ==========
+TEMP_EMAIL_BASE = "https://api.guerrillamail.com/ajax.php"
+TEMP_EMAIL_FILE = "temp_emails.json"
+
+def temp_email_load():
+    try:
+        if os.path.exists(TEMP_EMAIL_FILE):
+            with open(TEMP_EMAIL_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        logger.error(f"temp_email load error: {e}")
+    return {}
+
+def temp_email_save():
+    try:
+        with open(TEMP_EMAIL_FILE, 'w', encoding='utf-8') as f:
+            json.dump(TEMP_EMAIL_DATA, f, ensure_ascii=False)
+    except Exception as e:
+        logger.error(f"temp_email save error: {e}")
+
+TEMP_EMAIL_DATA = temp_email_load()
+
+def temp_email_clean_html(body):
+    body = re.sub(r"<[^>]+>", " ", body or "")
+    body = re.sub(r"\s+", " ", body).strip()
+    return body
+
+def temp_email_extract_otp(text):
+    if not text:
+        return None
+    codes = re.findall(r"\b\d{4,8}\b", text)
+    return codes[0] if codes else None
+
+def temp_email_menu_kb():
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("📧 إيميل جديد", callback_data="temp_email_new", api_kwargs={"style": "primary"})],
+        [InlineKeyboardButton("📂 إيميلاتي", callback_data="temp_email_list", api_kwargs={"style": "primary"})],
+        [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")],
+    ])
+
+async def temp_email_show_email_page(query, user_id, email):
+    edata = TEMP_EMAIL_DATA.get(str(user_id), {}).get("emails", {}).get(email)
+    if not edata:
+        await query.message.edit_text("❌ <b>الإيميل ده مش موجود.</b>", parse_mode='HTML')
+        return
+    msgs = edata.get("all_msgs", {})
+    text = f"📧 <b>الإيميل:</b>\n<code>{email}</code>\n\n📩 <b>الرسايل:</b> {len(msgs)}\n"
+    kb = []
+    for i, (mid, m) in enumerate(msgs.items(), 1):
+        subject = (m.get("mail_subject") or "بدون عنوان")[:28]
+        kb.append([InlineKeyboardButton(f"{i}. {subject}", callback_data=f"temp_email_view_{email}_{mid}", api_kwargs={"style": "primary"})])
+    kb.append([InlineKeyboardButton("🔄 فحص الرسايل دي", callback_data=f"temp_email_check_{email}", api_kwargs={"style": "success"})])
+    kb.append([InlineKeyboardButton("🗑️ مسح الإيميل ده", callback_data=f"temp_email_del_{email}", api_kwargs={"style": "danger"})])
+    kb.append([InlineKeyboardButton("⬅️ رجوع لإيميلاتي", callback_data="temp_email_list")])
+    await query.message.edit_text(text, reply_markup=InlineKeyboardMarkup(kb), parse_mode='HTML')
+
 async def handle_temp_email_button(query):
-    """معالجة زر الإيميل المؤقت"""
     try:
         user_id = query.from_user.id
-
         if BOT_STATUS == "stopped":
             await query.message.edit_text("⏸️ <b>البوت متوقف حاليًا</b>", parse_mode='HTML')
             return
-
         if is_user_blocked(user_id):
             await query.message.edit_text("🚫 <b>أنت محظور من استخدام هذا البوت!</b>", parse_mode='HTML')
             return
-          
-
-        email_bot_url = "t.me/emaaaaliyBot?start=0"
-        clickable_link = f'<a href="{email_bot_url}">{email_bot_url}</a>'
-
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📧 فتح بوت البريد المؤقت ✉️", url=email_bot_url)],
-            [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
-        ])
-
         await query.message.edit_text(
-            "📧 <b>خدمة الإيميل المؤقت</b>\n\n"
-            "🔗 <b>انقر على الزر أدناه لفتح بوت الإيميل المؤقت:</b>\n\n"
-            f"{clickable_link}\n\n"
-            "💡 <b>طريقة الاستخدام:</b>\n"
-            "1. افتح بوت الإيميل المؤقت من الزر أدناه\n"
-            "2. إضغط على /start\n"
-            "3. سيتم إنشاء إيميل مؤقت تلقائياً\n"
-            "4. يمكنك استقبال الرسائل على هذا الإيميل\n"
-            "5. الإيميل ينتهي بعد فترة تلقائياً\n"
-            "6. إذا البوت طلب منك اشتراك ف قنوات \n"
-            "   إرسل /start اكثر هيشتغل بدون اشتراك 👑",
-            reply_markup=keyboard,
-            parse_mode='HTML',
-            disable_web_page_preview=False
+            "📧 <b>خدمة البريد المؤقت</b>\n\n"
+            "اعمل إيميل مؤقت واستقبل عليه الرسايل وأكواد التحقق من غير ما تستخدم إيميلك الحقيقي.\n\n"
+            "البوت هينبهك لوحده أول ما توصلك رسالة جديدة.\n\n"
+            "📋 <b>اختر:</b>",
+            reply_markup=temp_email_menu_kb(),
+            parse_mode='HTML'
         )
-
     except Exception as e:
         logger.error(f"Error in handle_temp_email_button: {e}")
         await query.message.edit_text("❌ <b>حدث خطأ في تحميل الخدمة</b>", parse_mode='HTML')
+        
+async def temp_email_router(query, user_id):
+    try:
+        data = query.data
+        uid = str(user_id)
+
+        if data == "temp_email_new":
+            await query.message.edit_text("⏳ <b>بعملك إيميل جديد...</b>", parse_mode='HTML')
+            res = requests.get(f"{TEMP_EMAIL_BASE}?f=get_email_address&lang=en", timeout=15).json()
+            email, sid_token = res["email_addr"], res["sid_token"]
+            TEMP_EMAIL_DATA.setdefault(uid, {"emails": {}})
+            TEMP_EMAIL_DATA[uid]["emails"][email] = {"sid_token": sid_token, "seq": 0, "all_msgs": {}}
+            temp_email_save()
+            await query.message.edit_text(
+                f"✅ <b>إيميلك الجديد اتحفظ:</b>\n\n<code>{email}</code>\n\nهتلاقيه في قايمة إيميلاتي على طول، والبوت هينبهك أول ما توصلك رسالة عليه.",
+                reply_markup=temp_email_menu_kb(), parse_mode='HTML'
+            )
+            return True
+
+        if data == "temp_email_list":
+            emails = TEMP_EMAIL_DATA.get(uid, {}).get("emails", {})
+            if not emails:
+                await query.message.edit_text("📂 <b>لسه معملتش أي إيميل.</b>\nدوس إيميل جديد الأول.", reply_markup=temp_email_menu_kb(), parse_mode='HTML')
+                return True
+            kb = []
+            for email in emails.keys():
+                kb.append([InlineKeyboardButton(f"📧 {email}", callback_data=f"temp_email_open_{email}", api_kwargs={"style": "primary"})])
+            kb.append([InlineKeyboardButton("📧 إيميل جديد", callback_data="temp_email_new", api_kwargs={"style": "primary"})])
+            kb.append([InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")])
+            await query.message.edit_text(f"📂 <b>إيميلاتك ({len(emails)}):</b>\n\nدوس على أي إيميل عشان تشوف رسايله:", reply_markup=InlineKeyboardMarkup(kb), parse_mode='HTML')
+            return True
+
+        if data.startswith("temp_email_open_"):
+            email = data[len("temp_email_open_"):]
+            await temp_email_show_email_page(query, user_id, email)
+            return True
+
+        if data.startswith("temp_email_check_"):
+            email = data[len("temp_email_check_"):]
+            edata = TEMP_EMAIL_DATA.get(uid, {}).get("emails", {}).get(email)
+            if not edata:
+                return True
+            await query.message.edit_text("⏳ <b>بفحص... ثواني</b>", parse_mode='HTML')
+            res = requests.get(f"{TEMP_EMAIL_BASE}?f=check_email&seq={edata.get('seq', 0)}&sid_token={edata['sid_token']}", timeout=10).json()
+            edata["seq"] = res.get("seq", edata.get("seq", 0))
+            for m in res.get("list", []):
+                if "guerrillamail.com" in (m.get("mail_from") or "") and "Welcome" in (m.get("mail_subject") or ""):
+                    continue
+                edata["all_msgs"][str(m["mail_id"])] = m
+            temp_email_save()
+            await temp_email_show_email_page(query, user_id, email)
+            return True
+
+        if data.startswith("temp_email_del_"):
+            email = data[len("temp_email_del_"):]
+            try:
+                sid = TEMP_EMAIL_DATA[uid]["emails"][email]["sid_token"]
+                requests.get(f"{TEMP_EMAIL_BASE}?f=forget_me&sid_token={sid}", timeout=10)
+            except Exception:
+                pass
+            if email in TEMP_EMAIL_DATA.get(uid, {}).get("emails", {}):
+                del TEMP_EMAIL_DATA[uid]["emails"][email]
+                temp_email_save()
+            await query.message.edit_text("🗑️ <b>تم مسح الإيميل</b>", reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("📂 إيميلاتي", callback_data="temp_email_list")],
+                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")],
+            ]), parse_mode='HTML')
+            return True
+
+        if data.startswith("temp_email_view_"):
+            rest = data[len("temp_email_view_"):]
+            email, mid = rest.rsplit("_", 1)
+            edata = TEMP_EMAIL_DATA.get(uid, {}).get("emails", {}).get(email)
+            if not edata:
+                return True
+            details = requests.get(f"{TEMP_EMAIL_BASE}?f=fetch_email&email_id={mid}&sid_token={edata['sid_token']}", timeout=15).json()
+            subject = details.get("mail_subject", "بدون عنوان")
+            sender = details.get("mail_from", "غير معروف")
+            body = temp_email_clean_html(details.get("mail_body", ""))
+            otp = temp_email_extract_otp(body) or temp_email_extract_otp(subject)
+            text = f"📩 <b>رسالة</b>\n\n👤 <b>من:</b> {sender}\n📌 <b>الموضوع:</b> {subject}\n📧 <b>الإيميل:</b> <code>{email}</code>\n\n"
+            if otp:
+                text += f"🔑 <b>كود التحقق:</b> <code>{otp}</code>\n\n"
+            text += f"📄 <b>النص:</b>\n{body[:1000]}"
+            kb = InlineKeyboardMarkup([
+                [InlineKeyboardButton("⬅️ رجوع للإيميل", callback_data=f"temp_email_open_{email}")],
+                [InlineKeyboardButton("📂 إيميلاتي", callback_data="temp_email_list")],
+            ])
+            await query.message.edit_text(text, reply_markup=kb, parse_mode='HTML')
+            return True
+        return False
+    except Exception as e:
+        logger.error(f"temp_email_router error: {e}")
+        await query.message.edit_text("❌ <b>حدث خطأ في تحميل الخدمة</b>", parse_mode='HTML')
+        return True
+
+async def temp_email_auto_check(application):
+    while True:
+        try:
+            await asyncio.sleep(5)
+            for uid, udata in list(TEMP_EMAIL_DATA.items()):
+                for email, edata in list(udata.get("emails", {}).items()):
+                    try:
+                        res = requests.get(f"{TEMP_EMAIL_BASE}?f=check_email&seq={edata.get('seq', 0)}&sid_token={edata['sid_token']}", timeout=10).json()
+                        edata["seq"] = res.get("seq", edata.get("seq", 0))
+                        found = False
+                        for m in res.get("list", []):
+                            if "guerrillamail.com" in (m.get("mail_from") or "") and "Welcome" in (m.get("mail_subject") or ""):
+                                continue
+                            if str(m["mail_id"]) not in edata["all_msgs"]:
+                                edata["all_msgs"][str(m["mail_id"])] = m
+                                found = True
+                        if found:
+                            temp_email_save()
+                            last = res.get("list", [])[-1]
+                            await application.bot.send_message(
+                                chat_id=int(uid),
+                                text=f"📩 <b>وصلتك رسالة جديدة على:</b>\n<code>{email}</code>\n\n📌 {last.get('mail_subject','')}\n👤 {last.get('mail_from','')}",
+                                parse_mode='HTML',
+                                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📂 افتح إيميلاتي", callback_data="temp_email_list")]])
+                            )
+                    except Exception:
+                        continue
+        except Exception as e:
+            logger.error(f"temp_email_auto_check error: {e}")
+            await asyncio.sleep(5)
 
 # ========== دوال الأرقام الوهمية ==========
 async def handle_virtual_numbers(query):
@@ -5162,6 +5326,7 @@ async def main():
                 save_data()
         
         asyncio.create_task(auto_save())
+        asyncio.create_task(temp_email_auto_check(application))
         
         # إبقاء البوت شغال
         while True:
